@@ -17,6 +17,9 @@ func _ready():
 	randomize()
 	
 	for i in range(4):
+		# This is art. Bitte halten sie mindestens einen Meter Abstand!
+		# Vielen Dank für ihr Verständnis,
+		# die Museumsverwaltung
 		var x = pow(-1, i % 2) * 64 * (field_size - space_to_edge_x)
 		var y = pow(-1, (1 + i) % 3) * 37 * (field_size - space_to_edge_y)
 		
