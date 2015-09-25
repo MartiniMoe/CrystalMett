@@ -7,6 +7,9 @@ var move_max = 200
 var mov_x = 0
 var mov_y = 0
 
+const player_sprite_normal = preload("res://gfx/player.png")
+const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
+
 func _ready():
 	set_fixed_process(true)
 	
@@ -47,27 +50,37 @@ func _fixed_process(delta):
 	
 	if mov_x == 0 && mov_y == 1:
 		# unten
-		get_node("PlayerSprite").set_frame(2)
+		get_node("PlayerSprite").set_frame(1)
 	elif mov_x == 0 && mov_y == -1:
 		# oben
-		get_node("PlayerSprite").set_frame(5)
+		get_node("PlayerSprite").set_frame(4)
 	elif mov_y == 0 && mov_x == -1:
 		# links
-		get_node("PlayerSprite").set_frame(13)
+		get_node("PlayerSprite").set_frame(6)
 	elif mov_y == 0 && mov_x == 1:
 		# rechts
-		get_node("PlayerSprite").set_frame(14)
+		get_node("PlayerSprite").set_frame(2)
 	elif mov_x == -1 && mov_y == 1:
 		# unten links
-		get_node("PlayerSprite").set_frame(9)
+		get_node("PlayerSprite").set_frame(7)
 	elif mov_x == 1 && mov_y == 1:
 		# unten rechts
-		get_node("PlayerSprite").set_frame(10)
+		get_node("PlayerSprite").set_frame(0)
 	elif mov_x == -1 && mov_y == -1:
 		# oben links
-		get_node("PlayerSprite").set_frame(11)
+		get_node("PlayerSprite").set_frame(5)
 	elif mov_x == 1 && mov_y == -1:
 		# oben rechts
-		get_node("PlayerSprite").set_frame(7)
+		get_node("PlayerSprite").set_frame(3)
 	
 	set_linear_velocity(mv)
+	
+func _integrate_forces(state):
+	if state.get_contact_count() > 0:
+		for x in range(state.get_contact_count()):
+			var o = state.get_contact_collider_object(x)
+			if "pig" in o.get_groups() && get_node("PlayerSprite").get_texture() != player_sprite_crystal:
+				o.queue_free()
+				get_node("PlayerSprite").set_texture(player_sprite_crystal)
+			elif "factory" in o.get_groups():
+				get_node("PlayerSprite").set_texture(player_sprite_normal)
