@@ -29,6 +29,7 @@ func _ready():
 	sprite_ul = preload("res://gfx/pig.png")
 	sprite_or = preload("res://gfx/pig3.png")
 	sprite_ol = preload("res://gfx/pig2.png")
+	add_to_group("pig")
 	randomize()
 	animPlayer = get_node("AnimationPlayer")
 	will_move = round(rand_range(0, 1))
