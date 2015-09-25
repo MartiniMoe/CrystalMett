@@ -22,7 +22,57 @@ var rnd_tiles = [
 	"Grass01",
 	"Grass01",
 	"Grass01",
-	"Mud01"
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass01",
+	"Grass02",
+	"Grass02",
+	"Grass02",
+	"Grass02",
+	"Grass03",
+	"Grass03",
+	"Grass03",
+	"Grass03"
 ]
 
 var fence_top = ""
@@ -73,8 +123,8 @@ func _ready():
 			#var center = n / 2
 			var r = 7
 			
-			if int(sqrt(pow(x, 2) + pow(y, 2))) == r:
-				set_cell(x, y, get_tileset().find_tile_by_name("fence_horz"))
+			if int(sqrt(pow(x, 2) + pow(y, 2))) <= r:
+				set_cell(x, y, get_tileset().find_tile_by_name("Mud01"))
 	#set_pos(tilemap_x, tilemap_y)
 
 
