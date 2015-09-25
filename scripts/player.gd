@@ -3,7 +3,6 @@ extends RigidBody2D
 var move_accel = 800
 var move_deaccel = 800
 var move_max = 200
-var velocity = Vector2()
 
 func _ready():
 	set_fixed_process(true)
