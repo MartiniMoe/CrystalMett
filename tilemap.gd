@@ -5,7 +5,7 @@ extends TileMap
 # var a=2
 # var b="textvar"
 
-var field_size = 34#int(rand_range(5, 20))
+var field_size = 34
 
 var rnd_tiles = [
 	"Grass01",
@@ -36,6 +36,8 @@ var fence_right_top = ""
 
 func _ready():
 	# Initialization here
+	randomize()
+	
 	var tilemap_x = get_viewport().get_rect().pos.x / 2
 	var tilemap_y = get_viewport().get_rect().pos.y / 2
 	
@@ -72,7 +74,6 @@ func _ready():
 			var r = 7
 			
 			if int(sqrt(pow(x, 2) + pow(y, 2))) == r:
-				print(int(sqrt(x^2 + y^2)), " +++ ", x, " +++ ", y)
 				set_cell(x, y, get_tileset().find_tile_by_name("fence_horz"))
 	#set_pos(tilemap_x, tilemap_y)
 
