@@ -10,6 +10,5 @@ const factory = preload("res://factory.scn")
 func _ready():
 	# Initialization here
 	var fact = factory.instance()
-	fact.set_pos(50, 50)
+	fact.set_pos(vec2(-300, -300))
 	add_child(fact)
-	pass
