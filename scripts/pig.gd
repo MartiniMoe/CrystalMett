@@ -2,7 +2,7 @@ extends RigidBody2D
 
 var move_accel = 400
 var move_deaccel = 400
-var move_max = 100
+var move_max = 70
 
 var direction_change_interval = 2
 var direction_change_timer = 0
