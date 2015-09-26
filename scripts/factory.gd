@@ -31,5 +31,5 @@ func process_pig():
 		get_node("../GUI/Score_UR").set_text(str(int(get_node("../GUI/Score_UR").get_text())+1))
 	elif get_name() == "Factory_LL":
 		get_node("../GUI/Score_LL").set_text(str(int(get_node("../GUI/Score_LL").get_text())+1))
-	elif get_name() == "Factory_UL":
+	elif get_name() == "Factory_LR":
 		get_node("../GUI/Score_LR").set_text(str(int(get_node("../GUI/Score_LR").get_text())+1))
