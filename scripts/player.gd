@@ -14,10 +14,14 @@ var pig_max_carry = 5
 var mov_x = 0
 var mov_y = 0
 
+var is_carrying = false
+
 const player_sprite_normal = preload("res://gfx/player.png")
 const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
+const player_sprite_bernschwein = preload("res://gfx/PlayerBernschwein.png")
 const player_shirt_normal = preload("res://gfx/player_Shirt.png")
 const player_shirt_crystal = preload("res://gfx/PlayerCrystal_Shirt.png")
+const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
 var animPlayer = null
 
 var team1 = Color(1, 0, 0, 1)
@@ -37,6 +41,7 @@ func _ready():
 
 	set_fixed_process(true)
 	get_node("PlayerSprite").set_texture(player_sprite_normal)
+	is_carrying = false
 	animPlayer = get_node("AnimationPlayer")
 	animPlayer.play("walk")
 	
@@ -50,6 +55,7 @@ func _fixed_process(delta):
 			# PIG EXPLODE
 			pig_carry_counter = 0
 			get_node("PlayerSprite").set_texture(player_sprite_normal)
+			is_carrying = false
 			get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 			get_node("fire").set_emitting(false)
 			get_node("explosion").set_emitting(true)
@@ -143,14 +149,31 @@ func _integrate_forces(state):
 	if state.get_contact_count() > 0:
 		for x in range(state.get_contact_count()):
 			var o = state.get_contact_collider_object(x)
-			if "pig" in o.get_groups() && get_node("PlayerSprite").get_texture() != player_sprite_crystal:
+			if "pig" in o.get_groups() && !is_carrying:
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
+				is_carrying = true
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
 				get_node("fire").set_amount(16)
 			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
+				is_carrying = false
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				get_node("fire").set_emitting(false)
 				pig_carry_counter = 0
-				o.process_pig()
+				o.process_pig("normal")
+			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_bernschwein:
+				get_node("PlayerSprite").set_texture(player_sprite_normal)
+				is_carrying = false
+				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
+				get_node("fire").set_emitting(false)
+				pig_carry_counter = 0
+				o.process_pig("bernschwein")
+			elif "supply" in o.get_groups() && !is_carrying:
+				if o.item == "bernschwein":
+					get_node("PlayerSprite").set_texture(player_sprite_bernschwein)
+					is_carrying = true
+					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
+					get_node("Item").set_texture(item_bernschwein)
+					get_node("AnimationPlayer").play("item")
+					o.queue_free()
