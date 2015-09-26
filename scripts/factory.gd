@@ -16,13 +16,13 @@ var team4 = Color(1, 1, 0, 1)
 
 func _ready():
 	if team == 0:
-		get_node("Sprite").set_modulate(team1)
+		get_node("Sprite/shirt").set_modulate(team1)
 	if team == 1:
-		get_node("Sprite").set_modulate(team2)
+		get_node("Sprite/shirt").set_modulate(team2)
 	if team == 2:
-		get_node("Sprite").set_modulate(team3)
+		get_node("Sprite/shirt").set_modulate(team3)
 	if team == 3:
-		get_node("Sprite").set_modulate(team4)
+		get_node("Sprite/shirt").set_modulate(team4)
 	add_to_group("factory")
 	set_fixed_process(true)
 
