@@ -21,6 +21,11 @@ func _ready():
 	# Initialization here
 	randomize()
 	
+	get_node("GUI/Score_LL").set_text("0")
+	get_node("GUI/Score_LR").set_text("0")
+	get_node("GUI/Score_UL").set_text("0")
+	get_node("GUI/Score_UR").set_text("0")
+	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!
 		# Vielen Dank für ihr Verständnis,
@@ -31,7 +36,7 @@ func _ready():
 		if y < 0:
 			y -= 37
 		
-		var fact = factory.instance()
+		"""var fact = factory.instance()
 		
 		fact.set_pos(vec2(x, y))
 		var foo = 0
@@ -47,7 +52,7 @@ func _ready():
 		
 		#fact.get_node("Sprite").set_frame((foo + 1) % 4)
 		#fact.get_node(str((foo + 1) % 4)).set_name("smoke")
-		add_child(fact)
+		add_child(fact)"""
 
 func _process(delta):
 	time_elapsed += delta
