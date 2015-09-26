@@ -18,7 +18,10 @@ func _fixed_process(delta):
 			process_timer = 0
 			processing = false
 			get_node("smoke").set_emitting(false)
+			get_node("AnimationPlayer").stop()
+			
 
 func process_pig():
 	processing = true
 	process_timer = 0
+	get_node("AnimationPlayer").play("processing")
