@@ -21,10 +21,10 @@ func _ready():
 	# Initialization here
 	randomize()
 	
-	get_node("GUI/Score_LL").set_text("0")
-	get_node("GUI/Score_LR").set_text("0")
-	get_node("GUI/Score_UL").set_text("0")
-	get_node("GUI/Score_UR").set_text("0")
+	get_node("GUI/Score_LL/score").set_text("0")
+	get_node("GUI/Score_LR/score").set_text("0")
+	get_node("GUI/Score_UL/score").set_text("0")
+	get_node("GUI/Score_UR/score").set_text("0")
 	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!

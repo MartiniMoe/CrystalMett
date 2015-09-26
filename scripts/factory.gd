@@ -26,10 +26,14 @@ func process_pig():
 	process_timer = 0
 	get_node("AnimationPlayer").play("Processing")
 	if get_name() == "Factory_UL":
-		get_node("../GUI/Score_UL").set_text(str(int(get_node("../GUI/Score_UL").get_text())+1))
+		get_node("../GUI/Score_UL/score").set_text(str(int(get_node("../GUI/Score_UL/score").get_text())+1))
+		get_node("../GUI/Score_UL/AnimationPlayer").play("score")
 	elif get_name() == "Factory_UR":
-		get_node("../GUI/Score_UR").set_text(str(int(get_node("../GUI/Score_UR").get_text())+1))
+		get_node("../GUI/Score_UR/score").set_text(str(int(get_node("../GUI/Score_UR/score").get_text())+1))
+		get_node("../GUI/Score_UR/AnimationPlayer").play("score")
 	elif get_name() == "Factory_LL":
-		get_node("../GUI/Score_LL").set_text(str(int(get_node("../GUI/Score_LL").get_text())+1))
+		get_node("../GUI/Score_LL/score").set_text(str(int(get_node("../GUI/Score_LL/score").get_text())+1))
+		get_node("../GUI/Score_LL/AnimationPlayer").play("score")
 	elif get_name() == "Factory_LR":
-		get_node("../GUI/Score_LR").set_text(str(int(get_node("../GUI/Score_LR").get_text())+1))
+		get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+1))
+		get_node("../GUI/Score_LR/AnimationPlayer").play("score")
