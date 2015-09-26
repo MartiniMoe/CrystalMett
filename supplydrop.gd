@@ -1,12 +1,18 @@
+extends RigidBody2D
 
-extends Node2D
-
-var ziel = vec2(0,0)
-var w = 400
-var h = 400
+var fly_timer = 0
+var fly_time = 2
+var flying = true
 
 func _ready():
-	pass
+	get_node("AnimationPlayer").play("fly")
+	set_linear_velocity(vec2(0, 40))
+	set_fixed_process(true)
 	
 func _fixed_process(delta):
-	pass
+	if flying:
+		fly_timer += delta
+		if fly_timer > fly_time:
+			get_node("AnimationPlayer").play("land")
+			flying = false
+			set_linear_velocity(vec2(0, 0))
