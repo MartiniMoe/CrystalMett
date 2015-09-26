@@ -9,10 +9,15 @@ extends Node2D
 var field_size = int(34 / 2)
 var space_to_edge_x = 5
 var space_to_edge_y = 7
+var time_elapsed = 0
+var pig_spawn_delay = 2
+var pig_spawn_time = 0
 
 const factory = preload("res://factory.scn")
+const pig = preload("res://pig.scn")
 
 func _ready():
+	set_process(true)
 	# Initialization here
 	randomize()
 	
@@ -42,3 +47,15 @@ func _ready():
 		
 		fact.get_node("Sprite").set_frame((foo + 1) % 4)
 		add_child(fact)
+
+func _process(delta):
+	time_elapsed += delta
+	
+	if (time_elapsed > pig_spawn_time+pig_spawn_delay):
+		pig_spawn_time = time_elapsed
+		var piglet = pig.instance()
+		piglet.get_node("AnimationPlayer").play("spawn")
+		
+		piglet.set_pos(vec2(rand_range(-100,100),rand_range(-100,100)))
+		add_child(piglet)
+	

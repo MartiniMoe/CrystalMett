@@ -39,7 +39,8 @@ func _ready():
 	set_fixed_process(true)
 	
 func _fixed_process(delta):
-	randomize()
+	if animPlayer.get_current_animation() == "spawn" && animPlayer.is_playing():
+		return
 	direction_change_timer += delta
 
 	var mv = get_linear_velocity()
@@ -48,8 +49,8 @@ func _fixed_process(delta):
 		direction_change_timer = 0
 		will_move = round(rand_range(0, 1))
 		if will_move == 1:
-			x_dir = round(rand_range(0, 2))
-			y_dir = round(rand_range(0, 2))
+			x_dir = randi() % 3
+			y_dir = randi() % 3
 	
 	if will_move == 1:
 		if animPlayer.get_current_animation() != "walk":
