@@ -3,11 +3,26 @@ extends StaticBody2D
 
 signal pollute
 
+export var team = 0
+
 var processing = false
 var process_timer = 0
 var process_time = 2
 
+var team1 = Color(1, 0, 0, 1)
+var team2 = Color(0, 1, 0, 1)
+var team3 = Color(0, 0, 1, 1)
+var team4 = Color(1, 1, 0, 1)
+
 func _ready():
+	if team == 0:
+		get_node("Sprite").set_modulate(team1)
+	if team == 1:
+		get_node("Sprite").set_modulate(team2)
+	if team == 2:
+		get_node("Sprite").set_modulate(team3)
+	if team == 3:
+		get_node("Sprite").set_modulate(team4)
 	add_to_group("factory")
 	set_fixed_process(true)
 

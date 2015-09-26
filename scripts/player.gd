@@ -5,6 +5,7 @@ var move_deaccel = 800
 var move_max = 200
 
 export var joystick_number = 0
+export var team = 0
 var jostick_axis_treshhold = 0.5
 
 var pig_carry_counter = 0
@@ -17,7 +18,21 @@ const player_sprite_normal = preload("res://gfx/player.png")
 const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
 var animPlayer = null
 
+var team1 = Color(1, 0, 0, 1)
+var team2 = Color(0, 1, 0, 1)
+var team3 = Color(0, 0, 1, 1)
+var team4 = Color(1, 1, 0, 1)
+
 func _ready():
+	if team == 0:
+		get_node("PlayerSprite").set_modulate(team1)
+	if team == 1:
+		get_node("PlayerSprite").set_modulate(team2)
+	if team == 2:
+		get_node("PlayerSprite").set_modulate(team3)
+	if team == 3:
+		get_node("PlayerSprite").set_modulate(team4)
+
 	set_fixed_process(true)
 	get_node("PlayerSprite").set_texture(player_sprite_normal)
 	animPlayer = get_node("AnimationPlayer")
