@@ -98,5 +98,5 @@ func _integrate_forces(state):
 			if "pig" in o.get_groups() && get_node("PlayerSprite").get_texture() != player_sprite_crystal:
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
-			elif "factory" in o.get_groups():
+			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
