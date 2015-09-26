@@ -1,4 +1,3 @@
-
 extends TileMap
 
 # member variables here, example:
@@ -85,6 +84,74 @@ var fence_bottom_right = ""
 var fence_right = ""
 var fence_right_top = ""
 
+func create_hole(id):
+	print("LOLOLOLOLOLO")
+	randomize()
+	
+	if randi() % 2 == 0:
+		return
+	
+	var margin = 6
+	var offset_x = 0
+	var offset_y = 0
+	
+	if id == "Factory_UL":
+		offset_x = -(field_size / 2 - margin / 2) - 4
+	elif id == "Factory_UR":
+		offset_y = -(field_size / 2 - margin / 2) - 4
+	elif id == "Factory_LR":
+		offset_x = (field_size / 2 - margin / 2) + 4
+	elif id == "Factory_LL":
+		offset_y = (field_size / 2 - margin / 2) + 4
+	
+	var n = field_size / 2 - margin
+	
+	var tiles_count = 0
+	var counter = 0
+	
+	for x in range((-1) * field_size / 2, 1 * field_size / 2):
+		for y in range((-1) * field_size / 2, 1 * field_size / 2):
+			if abs(x) + abs(y) < n:
+				tiles_count += 1
+	
+	var selected_tile = randi() % tiles_count
+	var alt_strategy = pow(-1, randi() % 2)
+	
+	var last_tile_no_hole_x = -1
+	var last_tile_no_hole_y = -1
+	
+	var fast_forward = false
+	
+	for x in range((-1) * field_size / 2, 1 * field_size / 2):
+		for y in range((-1) * field_size / 2, 1 * field_size / 2):
+			var n = field_size / 2 - margin
+			
+			if abs(x) + abs(y) < n:
+				var tile_type = get_cell(x + offset_x, y + offset_y - 1)
+				
+				if tile_type != get_tileset().find_tile_by_name("Hole01"):
+					last_tile_no_hole_x = x
+					last_tile_no_hole_y = y
+				
+				if fast_forward and tile_type != get_tileset().find_tile_by_name("Hole01"):
+					set_cell(x + offset_x, y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+					return
+				elif fast_forward:
+					continue
+				
+				if counter == selected_tile:
+					if tile_type == get_tileset().find_tile_by_name("Hole01"):
+						if alt_strategy == -1:
+							set_cell(last_tile_no_hole_x + offset_x, last_tile_no_hole_y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+							return
+						else:
+							fast_forward = true
+					else:
+						set_cell(x + offset_x, y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+						return
+				else:			
+					counter += 1
+
 func _ready():
 	# Initialization here
 	randomize()
@@ -126,6 +193,10 @@ func _ready():
 			
 			if int(sqrt(pow(x, 2) + pow(y, 2))) <= r:
 				set_cell(x, y, get_tileset().find_tile_by_name("Mud01"))
+	
 	#set_pos(tilemap_x, tilemap_y)
-
-
+	
+	#connect("pollute", self, "create_hole")
+	
+	#for i in range(1000):
+	#	create_hole("Factory_UL")
