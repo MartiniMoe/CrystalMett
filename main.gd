@@ -18,20 +18,8 @@ const pig = preload("res://pig.scn")
 
 func _ready():
 	set_process(true)
+	# Initialization here
 	randomize()
-	
-	get_node("GUI/Score_LL").set_text("0")
-	get_node("GUI/Score_UL").set_text("0")
-	get_node("GUI/Score_LR").set_text("0")
-	get_node("GUI/Score_UR").set_text("0")
-	
-	get_node("Factory_UL/3").set_name("smoke")
-	get_node("Factory_LL/Sprite").set_frame(0)
-	get_node("Factory_LL/0").set_name("smoke")
-	get_node("Factory_UR/Sprite").set_frame(1)
-	get_node("Factory_UR/1").set_name("smoke")
-	get_node("Factory_LR/Sprite").set_frame(2)
-	get_node("Factory_LR/2").set_name("smoke")
 	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!
@@ -43,7 +31,7 @@ func _ready():
 		if y < 0:
 			y -= 37
 		
-		"""var fact = factory.instance()
+		var fact = factory.instance()
 		
 		fact.set_pos(vec2(x, y))
 		var foo = 0
@@ -57,9 +45,9 @@ func _ready():
 		if i == 0:
 			foo = 0
 		
-		fact.get_node("Sprite").set_frame((foo + 1) % 4)
-		fact.get_node(str((foo + 1) % 4)).set_name("smoke")
-		add_child(fact)"""
+		#fact.get_node("Sprite").set_frame((foo + 1) % 4)
+		#fact.get_node(str((foo + 1) % 4)).set_name("smoke")
+		add_child(fact)
 
 func _process(delta):
 	time_elapsed += delta
