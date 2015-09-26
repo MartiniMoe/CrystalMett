@@ -16,6 +16,8 @@ var mov_y = 0
 
 const player_sprite_normal = preload("res://gfx/player.png")
 const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
+const player_shirt_normal = preload("res://gfx/player_Shirt.png")
+const player_shirt_crystal = preload("res://gfx/PlayerCrystal_Shirt.png")
 var animPlayer = null
 
 var team1 = Color(1, 0, 0, 1)
@@ -25,13 +27,13 @@ var team4 = Color(1, 1, 0, 1)
 
 func _ready():
 	if team == 0:
-		get_node("PlayerSprite").set_modulate(team1)
+		get_node("PlayerSprite/shirt_crystal").set_modulate(team1)
 	if team == 1:
-		get_node("PlayerSprite").set_modulate(team2)
+		get_node("PlayerSprite/shirt_crystal").set_modulate(team2)
 	if team == 2:
-		get_node("PlayerSprite").set_modulate(team3)
+		get_node("PlayerSprite/shirt_crystal").set_modulate(team3)
 	if team == 3:
-		get_node("PlayerSprite").set_modulate(team4)
+		get_node("PlayerSprite/shirt_crystal").set_modulate(team4)
 
 	set_fixed_process(true)
 	get_node("PlayerSprite").set_texture(player_sprite_normal)
@@ -48,6 +50,7 @@ func _fixed_process(delta):
 			# PIG EXPLODE
 			pig_carry_counter = 0
 			get_node("PlayerSprite").set_texture(player_sprite_normal)
+			get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 			get_node("fire").set_emitting(false)
 			get_node("explosion").set_emitting(true)
 		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
@@ -104,27 +107,35 @@ func _fixed_process(delta):
 	if mov_x == 0 && mov_y == 1:
 		# unten
 		get_node("PlayerSprite").set_frame(1)
+		get_node("PlayerSprite/shirt_crystal").set_frame(1)
 	elif mov_x == 0 && mov_y == -1:
 		# oben
 		get_node("PlayerSprite").set_frame(4)
+		get_node("PlayerSprite/shirt_crystal").set_frame(4)
 	elif mov_y == 0 && mov_x == -1:
 		# links
 		get_node("PlayerSprite").set_frame(6)
+		get_node("PlayerSprite/shirt_crystal").set_frame(6)
 	elif mov_y == 0 && mov_x == 1:
 		# rechts
 		get_node("PlayerSprite").set_frame(2)
+		get_node("PlayerSprite/shirt_crystal").set_frame(2)
 	elif mov_x == -1 && mov_y == 1:
 		# unten links
 		get_node("PlayerSprite").set_frame(7)
+		get_node("PlayerSprite/shirt_crystal").set_frame(7)
 	elif mov_x == 1 && mov_y == 1:
 		# unten rechts
 		get_node("PlayerSprite").set_frame(0)
+		get_node("PlayerSprite/shirt_crystal").set_frame(0)
 	elif mov_x == -1 && mov_y == -1:
 		# oben links
 		get_node("PlayerSprite").set_frame(5)
+		get_node("PlayerSprite/shirt_crystal").set_frame(5)
 	elif mov_x == 1 && mov_y == -1:
 		# oben rechts
 		get_node("PlayerSprite").set_frame(3)
+		get_node("PlayerSprite/shirt_crystal").set_frame(3)
 	
 	set_linear_velocity(mv)
 	
@@ -135,9 +146,11 @@ func _integrate_forces(state):
 			if "pig" in o.get_groups() && get_node("PlayerSprite").get_texture() != player_sprite_crystal:
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
+				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
 				get_node("fire").set_amount(16)
 			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
+				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				get_node("fire").set_emitting(false)
 				pig_carry_counter = 0
 				o.process_pig()
