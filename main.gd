@@ -13,8 +13,12 @@ var time_elapsed = 0
 var pig_spawn_delay = 2
 var pig_spawn_time = 0
 
+var supply_spawn_delay = 5
+var supply_spawn_time = 0
+
 #const factory = preload("res://factory.scn")
 const pig = preload("res://pig.scn")
+const supply = preload("res://supplydrop.scn")
 
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
@@ -69,4 +73,11 @@ func _process(delta):
 		
 		piglet.set_pos(vec2(rand_range(-100,100),rand_range(-100,100)))
 		add_child(piglet)
-	
+	if (time_elapsed > supply_spawn_time+supply_spawn_delay):
+		supply_spawn_time = time_elapsed
+		var new_supply = supply.instance()
+		#var destination = vec2(rand_range(0, get_viewport_rect().size.width), rand_range(0, get_viewport_rect().size.height))
+		var destination = vec2(rand_range(-300, 300), rand_range(-200, 200)-120)
+		new_supply.destination = vec2(destination)
+		new_supply.set_pos(vec2(destination.x, -800))
+		add_child(new_supply)

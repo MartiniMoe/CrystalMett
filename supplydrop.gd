@@ -1,18 +1,20 @@
 extends RigidBody2D
 
-var fly_timer = 0
-var fly_time = 2
+var destination = vec2()
 var flying = true
 
 func _ready():
 	get_node("AnimationPlayer").play("fly")
-	set_linear_velocity(vec2(0, 40))
+	set_linear_velocity(vec2(0, 80))
 	set_fixed_process(true)
 	
 func _fixed_process(delta):
 	if flying:
-		fly_timer += delta
-		if fly_timer > fly_time:
+		if get_pos().y > destination.y:
 			get_node("AnimationPlayer").play("land")
+			get_node("Box").set_rot(0)
 			flying = false
 			set_linear_velocity(vec2(0, 0))
+			get_node("BoxCollision").set_trigger(false)
+		else:
+			set_linear_velocity(vec2(0, 80))
