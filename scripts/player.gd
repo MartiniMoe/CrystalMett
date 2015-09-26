@@ -58,11 +58,9 @@ func _fixed_process(delta):
 	
 	if walking:
 		if !get_node("AnimationPlayer").is_playing():
-			print("walking")
 			animPlayer.play("walk")
 	else:
 		animPlayer.stop()
-		print("stopping")
 	
 	if mov_x == 0 && mov_y == 1:
 		# unten
@@ -100,3 +98,4 @@ func _integrate_forces(state):
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
 			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
+				o.process_pig()

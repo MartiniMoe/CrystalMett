@@ -11,6 +11,9 @@ var y_dir = 0
 var will_move = 0
 var animPlayer = null
 
+var x_max = 80
+var y_max = 80
+
 var sprite_r = null
 var sprite_l = null
 var sprite_o = null
@@ -56,10 +59,10 @@ func _fixed_process(delta):
 		if animPlayer.get_current_animation() != "walk":
 			animPlayer.play("walk")
 		if (x_dir == 0):
-			if mv.x < move_max:
+			if mv.x < move_max && get_pos().x < x_max:
 				mv.x += move_accel*delta
 		elif (x_dir == 1):
-			if mv.x > -move_max:
+			if mv.x > -move_max && get_pos().x > -x_max:
 				mv.x -= move_accel*delta
 		else:
 			var xv = abs(mv.x)
@@ -69,10 +72,10 @@ func _fixed_process(delta):
 			mv.x = sign(mv.x)*xv
 			
 		if (y_dir == 0):
-			if mv.y < move_max:
+			if mv.y < move_max && get_pos().y < y_max:
 				mv.y += move_accel*delta
 		elif (y_dir == 1):
-			if mv.y > -move_max:
+			if mv.y > -move_max && get_pos().y > -y_max:
 				mv.y -= move_accel*delta
 		else:
 			var yv = abs(mv.y)
