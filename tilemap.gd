@@ -196,10 +196,10 @@ func _ready():
 			#	set_cell(x, y, get_tileset().find_tile_by_name("fence_vert"))
 			
 			#var center = n / 2
-			var r = 7
+			#var r = 7
 			
-			if int(sqrt(pow(x, 2) + pow(y, 2))) <= r:
-				set_cell(x, y, get_tileset().find_tile_by_name("Mud01"))
+			#if int(sqrt(pow(x, 2) + pow(y, 2))) <= r:
+			#	set_cell(x, y, get_tileset().find_tile_by_name("Mud01"))
 	
 	#set_pos(tilemap_x, tilemap_y)
 	
