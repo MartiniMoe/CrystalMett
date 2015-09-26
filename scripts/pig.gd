@@ -11,27 +11,10 @@ var y_dir = 0
 var will_move = 0
 var animPlayer = null
 
-var x_max = 80
+var x_max = 100
 var y_max = 80
 
-var sprite_r = null
-var sprite_l = null
-var sprite_o = null
-var sprite_u = null
-var sprite_ur = null
-var sprite_ul = null
-var sprite_or = null
-var sprite_ol = null
-
 func _ready():
-	sprite_r = preload("res://gfx/pig6.png")
-	sprite_l = preload("res://gfx/pig5.png")
-	sprite_o = preload("res://gfx/pig8.png")
-	sprite_u = preload("res://gfx/pig7.png")
-	sprite_ur = preload("res://gfx/pig4.png")
-	sprite_ul = preload("res://gfx/pig.png")
-	sprite_or = preload("res://gfx/pig3.png")
-	sprite_ol = preload("res://gfx/pig2.png")
 	add_to_group("pig")
 	randomize()
 	animPlayer = get_node("AnimationPlayer")
@@ -99,27 +82,27 @@ func _fixed_process(delta):
 	
 	if x_dir == 0 && y_dir == 2:
 		# rechts
-		get_node("Sprite").set_texture(sprite_r)
+		get_node("Sprite").set_frame(1)
 	elif x_dir == 1 && y_dir == 2:
 		# links
-		get_node("Sprite").set_texture(sprite_l)
+		get_node("Sprite").set_frame(5)
 	elif x_dir == 2 && y_dir == 0:
 		# unten
-		get_node("Sprite").set_texture(sprite_u)
+		get_node("Sprite").set_frame(7)
 	elif x_dir == 2 && y_dir == 1:
 		# oben
-		get_node("Sprite").set_texture(sprite_o)
+		get_node("Sprite").set_frame(3)
 	elif x_dir == 0 && y_dir == 0:
 		# unten rechts
-		get_node("Sprite").set_texture(sprite_ur)
+		get_node("Sprite").set_frame(0)
 	elif x_dir == 0 && y_dir == 1:
 		# oben rechts
-		get_node("Sprite").set_texture(sprite_or)
+		get_node("Sprite").set_frame(2)
 	elif x_dir == 1 && y_dir == 0:
 		# unten links
-		get_node("Sprite").set_texture(sprite_ul)
+		get_node("Sprite").set_frame(7)
 	elif x_dir == 1 && y_dir == 1:
 		# oben links
-		get_node("Sprite").set_texture(sprite_ol)
+		get_node("Sprite").set_frame(4)
 	
 	set_linear_velocity(mv)
