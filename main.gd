@@ -29,4 +29,16 @@ func _ready():
 		var fact = factory.instance()
 		
 		fact.set_pos(vec2(x, y))
+		var foo = 0
+		
+		if i == 2:
+			foo = 1
+		if i == 3:
+			foo = 2
+		if i == 1:
+			foo = 3
+		if i == 0:
+			foo = 0
+		
+		fact.get_node("Sprite").set_frame((foo + 1) % 4)
 		add_child(fact)
