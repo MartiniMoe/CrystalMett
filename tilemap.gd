@@ -72,7 +72,8 @@ var rnd_tiles = [
 	"Grass03",
 	"Grass03",
 	"Grass03",
-	"Grass03"
+	"Grass03",
+	"Stone01"
 ]
 
 var fence_top = ""

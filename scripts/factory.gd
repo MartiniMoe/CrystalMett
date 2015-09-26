@@ -24,4 +24,12 @@ func _fixed_process(delta):
 func process_pig():
 	processing = true
 	process_timer = 0
-	get_node("AnimationPlayer").play("processing")
+	get_node("AnimationPlayer").play("Processing")
+	if get_name() == "Factory_UL":
+		get_node("../GUI/Score_UL").set_text(str(int(get_node("../GUI/Score_UL").get_text())+1))
+	elif get_name() == "Factory_UR":
+		get_node("../GUI/Score_UR").set_text(str(int(get_node("../GUI/Score_UR").get_text())+1))
+	elif get_name() == "Factory_LL":
+		get_node("../GUI/Score_LL").set_text(str(int(get_node("../GUI/Score_LL").get_text())+1))
+	elif get_name() == "Factory_UL":
+		get_node("../GUI/Score_LR").set_text(str(int(get_node("../GUI/Score_LR").get_text())+1))

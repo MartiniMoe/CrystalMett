@@ -26,6 +26,12 @@ func _ready():
 	get_node("GUI/Score_UR").set_text("0")
 	
 	get_node("Factory_UL/3").set_name("smoke")
+	get_node("Factory_LL/Sprite").set_frame(0)
+	get_node("Factory_LL/0").set_name("smoke")
+	get_node("Factory_UR/Sprite").set_frame(1)
+	get_node("Factory_UR/1").set_name("smoke")
+	get_node("Factory_LR/Sprite").set_frame(2)
+	get_node("Factory_LR/2").set_name("smoke")
 	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!
