@@ -3,7 +3,7 @@ extends StaticBody2D
 
 signal pollute(id)
 
-export var team = 0
+var team = 0
 
 var processing = false
 var process_timer = 0
@@ -18,14 +18,6 @@ var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
 
 func _ready():
-	if team == 0:
-		get_node("Sprite/shirt").set_modulate(team1)
-	if team == 1:
-		get_node("Sprite/shirt").set_modulate(team2)
-	if team == 2:
-		get_node("Sprite/shirt").set_modulate(team3)
-	if team == 3:
-		get_node("Sprite/shirt").set_modulate(team4)
 	add_to_group("factory")
 	set_fixed_process(true)
 
@@ -80,3 +72,13 @@ func process_pig(pig_type):
 		emit_signal("pollute", get_name())
 		emit_signal("pollute", get_name())
 		emit_signal("pollute", get_name())
+
+func colorize():
+	if team == 0:
+		get_node("Sprite/shirt").set_modulate(team1)
+	if team == 1:
+		get_node("Sprite/shirt").set_modulate(team2)
+	if team == 2:
+		get_node("Sprite/shirt").set_modulate(team3)
+	if team == 3:
+		get_node("Sprite/shirt").set_modulate(team4)

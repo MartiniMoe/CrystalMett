@@ -30,6 +30,16 @@ func _ready():
 	# Initialization here
 	randomize()
 	
+	get_node("Factory_LL").team = 0
+	get_node("Factory_LR").team = 1
+	get_node("Factory_UL").team = 2
+	get_node("Factory_UR").team = 3
+	
+	get_node("Factory_LL").colorize()
+	get_node("Factory_LR").colorize()
+	get_node("Factory_UL").colorize()
+	get_node("Factory_UR").colorize()
+	
 	get_node("GUI/Score_LL/score").set_text("0")
 	get_node("GUI/Score_LR/score").set_text("0")
 	get_node("GUI/Score_UL/score").set_text("0")
@@ -81,3 +91,21 @@ func _process(delta):
 		new_supply.destination = vec2(destination)
 		new_supply.set_pos(vec2(destination.x, -800))
 		add_child(new_supply)
+
+func rotate_factory_teams():
+	var teams = [0, 1, 2, 3]
+	var team_num = randi()%4
+	get_node("Factory_LL").team = teams[team_num]
+	teams.remove(team_num)
+	team_num = randi()%3
+	get_node("Factory_LR").team = teams[team_num]
+	teams.remove(team_num)
+	team_num = randi()%2
+	get_node("Factory_UL").team = teams[team_num]
+	teams.remove(team_num)
+	get_node("Factory_UR").team = teams[0]
+	
+	get_node("Factory_LL").colorize()
+	get_node("Factory_LR").colorize()
+	get_node("Factory_UL").colorize()
+	get_node("Factory_UR").colorize()

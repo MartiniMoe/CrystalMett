@@ -22,6 +22,7 @@ const player_sprite_bernschwein = preload("res://gfx/PlayerBernschwein.png")
 const player_shirt_normal = preload("res://gfx/player_Shirt.png")
 const player_shirt_crystal = preload("res://gfx/PlayerCrystal_Shirt.png")
 const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
+const item_colorchange = preload("res://gfx/BonusColorchange.png")
 var animPlayer = null
 
 var team1 = Color(1, 0, 0, 1)
@@ -177,3 +178,8 @@ func _integrate_forces(state):
 					get_node("Item").set_texture(item_bernschwein)
 					get_node("AnimationPlayer").play("item")
 					o.queue_free()
+				elif o.item == "colorchange":
+					get_node("Item").set_texture(item_colorchange)
+					get_node("AnimationPlayer").play("item")
+					o.queue_free()
+					get_parent().rotate_factory_teams()
