@@ -9,18 +9,24 @@ var mov_y = 0
 
 const player_sprite_normal = preload("res://gfx/player.png")
 const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
+var animPlayer = null
 
 func _ready():
 	set_fixed_process(true)
+	animPlayer = get_node("AnimationPlayer")
+	animPlayer.play("walk")
 	
 func _fixed_process(delta):
 	var mv = get_linear_velocity()
+	var walking = false
 	
 	if (Input.is_action_pressed("down_0")):
+		walking = true
 		if mv.y < move_max:
 			mv.y += move_accel*delta
 			mov_y = 1
 	elif (Input.is_action_pressed("up_0")):
+		walking = true
 		if mv.y > -move_max:
 			mv.y -= move_accel*delta
 			mov_y = -1
@@ -33,10 +39,12 @@ func _fixed_process(delta):
 		mv.y = sign(mv.y)*yv
 	
 	if (Input.is_action_pressed("right_0")):
+		walking = true
 		if mv.x < move_max:
 			mv.x += move_accel*delta
 			mov_x = 1
 	elif (Input.is_action_pressed("left_0")):
+		walking = true
 		if mv.x > -move_max:
 			mv.x -= move_accel*delta
 			mov_x = -1
@@ -47,6 +55,14 @@ func _fixed_process(delta):
 		if xv < 0:
 			xv = 0
 		mv.x = sign(mv.x)*xv
+	
+	if walking:
+		if !get_node("AnimationPlayer").is_playing():
+			print("walking")
+			animPlayer.play("walk")
+	else:
+		animPlayer.stop()
+		print("stopping")
 	
 	if mov_x == 0 && mov_y == 1:
 		# unten
