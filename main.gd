@@ -16,6 +16,11 @@ var pig_spawn_time = 0
 #const factory = preload("res://factory.scn")
 const pig = preload("res://pig.scn")
 
+var team1 = Color(1, 0, 0, 1)
+var team2 = Color(0, 1, 0, 1)
+var team3 = Color(0, 0, 1, 1)
+var team4 = Color(1, 1, 0, 1)
+
 func _ready():
 	set_process(true)
 	# Initialization here
