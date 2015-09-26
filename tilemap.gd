@@ -86,6 +86,13 @@ var fence_right_top = ""
 
 func create_hole(id):
 	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	print("LOLOLOLOLOLO")
+	
 	randomize()
 	
 	if randi() % 2 == 0:
@@ -196,7 +203,10 @@ func _ready():
 	
 	#set_pos(tilemap_x, tilemap_y)
 	
-	#connect("pollute", self, "create_hole")
+	get_node("../Factory_UL").connect("pollute", self, "create_hole")
+	get_node("../Factory_UR").connect("pollute", self, "create_hole")
+	get_node("../Factory_LR").connect("pollute", self, "create_hole")
+	get_node("../Factory_LL").connect("pollute", self, "create_hole")
 	
-	#for i in range(1000):
+	#for i in range(100):
 	#	create_hole("Factory_UL")

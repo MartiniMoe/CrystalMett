@@ -1,7 +1,7 @@
 
 extends StaticBody2D
 
-signal pollute
+signal pollute(id)
 
 export var team = 0
 
@@ -54,4 +54,4 @@ func process_pig():
 	elif get_name() == "Factory_LR":
 		get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+1))
 		get_node("../GUI/Score_LR/AnimationPlayer").play("score")
-		emit_signal("pollute",get_name())
+	emit_signal("pollute", get_name())
