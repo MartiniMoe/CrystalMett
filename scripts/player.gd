@@ -33,14 +33,15 @@ func _fixed_process(delta):
 			# PIG EXPLODE
 			pig_carry_counter = 0
 			get_node("PlayerSprite").set_texture(player_sprite_normal)
-			get_node("explosion").set_emitting(false)
-		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
-			get_node("explosion").set_amount(128)
-		elif pig_carry_counter > pig_max_carry/2:
-			get_node("explosion").set_amount(64)
-		elif pig_carry_counter > pig_max_carry/3:
-			get_node("explosion").set_amount(16)
+			get_node("fire").set_emitting(false)
 			get_node("explosion").set_emitting(true)
+		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
+			get_node("fire").set_amount(128)
+		elif pig_carry_counter > pig_max_carry/2:
+			get_node("fire").set_amount(64)
+		elif pig_carry_counter > pig_max_carry/3:
+			get_node("fire").set_amount(16)
+			get_node("fire").set_emitting(true)
 		
 	
 	if (Input.is_action_pressed("down_0") || Input.get_joy_axis(joystick_number, 1) > jostick_axis_treshhold):
@@ -119,9 +120,9 @@ func _integrate_forces(state):
 			if "pig" in o.get_groups() && get_node("PlayerSprite").get_texture() != player_sprite_crystal:
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
-				get_node("explosion").set_amount(16)
+				get_node("fire").set_amount(16)
 			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
-				get_node("explosion").set_emitting(false)
+				get_node("fire").set_emitting(false)
 				pig_carry_counter = 0
 				o.process_pig()
