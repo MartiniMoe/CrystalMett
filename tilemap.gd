@@ -199,7 +199,7 @@ func _ready():
 			var r = 7
 			
 			if int(sqrt(pow(x, 2) + pow(y, 2))) <= r:
-				set_cell(x, y, get_tileset().find_tile_by_name("Grass01"))
+				set_cell(x, y, get_tileset().find_tile_by_name("Mud01"))
 	
 	#set_pos(tilemap_x, tilemap_y)
 	

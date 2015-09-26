@@ -2,16 +2,11 @@ extends RigidBody2D
 
 var destination = vec2()
 var flying = true
-var item = null
-
-var rnd_items = ["bernschwein"]
 
 func _ready():
-	add_to_group("supply")
 	get_node("AnimationPlayer").play("fly")
 	set_linear_velocity(vec2(0, 80))
 	set_fixed_process(true)
-	item = rnd_items[int(rand_range(0, rnd_items.size()))]
 	
 func _fixed_process(delta):
 	if flying:
