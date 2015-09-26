@@ -46,7 +46,7 @@ func _ready():
 			foo = 0
 		
 		fact.get_node("Sprite").set_frame((foo + 1) % 4)
-		fact.get_node(str((foo + 1) % 4)).set_emitting(true)
+		fact.get_node(str((foo + 1) % 4)).set_name("smoke")
 		add_child(fact)
 
 func _process(delta):
