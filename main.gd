@@ -13,7 +13,7 @@ var time_elapsed = 0
 var pig_spawn_delay = 2
 var pig_spawn_time = 0
 
-var supply_spawn_delay = 5
+var supply_spawn_delay = 10
 var supply_spawn_time = 0
 
 #const factory = preload("res://factory.scn")
