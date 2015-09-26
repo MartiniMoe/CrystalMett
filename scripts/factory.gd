@@ -9,6 +9,9 @@ var processing = false
 var process_timer = 0
 var process_time = 2
 
+var points_normal = 1
+var points_bernschwein = 4
+
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
@@ -38,20 +41,42 @@ func _fixed_process(delta):
 			get_node("AnimationPlayer").stop()
 			
 
-func process_pig():
+func process_pig(pig_type):
 	processing = true
 	process_timer = 0
-	get_node("AnimationPlayer").play("Processing")
-	if get_name() == "Factory_UL":
-		get_node("../GUI/Score_UL/score").set_text(str(int(get_node("../GUI/Score_UL/score").get_text())+1))
-		get_node("../GUI/Score_UL/AnimationPlayer").play("score")
-	elif get_name() == "Factory_UR":
-		get_node("../GUI/Score_UR/score").set_text(str(int(get_node("../GUI/Score_UR/score").get_text())+1))
-		get_node("../GUI/Score_UR/AnimationPlayer").play("score")
-	elif get_name() == "Factory_LL":
-		get_node("../GUI/Score_LL/score").set_text(str(int(get_node("../GUI/Score_LL/score").get_text())+1))
-		get_node("../GUI/Score_LL/AnimationPlayer").play("score")
-	elif get_name() == "Factory_LR":
-		get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+1))
-		get_node("../GUI/Score_LR/AnimationPlayer").play("score")
-	emit_signal("pollute", get_name())
+	if pig_type == "normal":
+		process_time = 2
+		get_node("AnimationPlayer").play("Processing")
+		if get_name() == "Factory_UL":
+			get_node("../GUI/Score_UL/score").set_text(str(int(get_node("../GUI/Score_UL/score").get_text())+points_normal))
+			get_node("../GUI/Score_UL/AnimationPlayer").play("score")
+		elif get_name() == "Factory_UR":
+			get_node("../GUI/Score_UR/score").set_text(str(int(get_node("../GUI/Score_UR/score").get_text())+points_normal))
+			get_node("../GUI/Score_UR/AnimationPlayer").play("score")
+		elif get_name() == "Factory_LL":
+			get_node("../GUI/Score_LL/score").set_text(str(int(get_node("../GUI/Score_LL/score").get_text())+points_normal))
+			get_node("../GUI/Score_LL/AnimationPlayer").play("score")
+		elif get_name() == "Factory_LR":
+			get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+points_normal))
+			get_node("../GUI/Score_LR/AnimationPlayer").play("score")
+		emit_signal("pollute", get_name())
+	if pig_type == "bernschwein":
+		process_time = 4
+		print("processing bernschwein")
+		get_node("AnimationPlayer").play("Processing")
+		if get_name() == "Factory_UL":
+			get_node("../GUI/Score_UL/score").set_text(str(int(get_node("../GUI/Score_UL/score").get_text())+points_bernschwein))
+			get_node("../GUI/Score_UL/AnimationPlayer").play("score")
+		elif get_name() == "Factory_UR":
+			get_node("../GUI/Score_UR/score").set_text(str(int(get_node("../GUI/Score_UR/score").get_text())+points_bernschwein))
+			get_node("../GUI/Score_UR/AnimationPlayer").play("score")
+		elif get_name() == "Factory_LL":
+			get_node("../GUI/Score_LL/score").set_text(str(int(get_node("../GUI/Score_LL/score").get_text())+points_bernschwein))
+			get_node("../GUI/Score_LL/AnimationPlayer").play("score")
+		elif get_name() == "Factory_LR":
+			get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+points_bernschwein))
+			get_node("../GUI/Score_LR/AnimationPlayer").play("score")
+		emit_signal("pollute", get_name())
+		emit_signal("pollute", get_name())
+		emit_signal("pollute", get_name())
+		emit_signal("pollute", get_name())
