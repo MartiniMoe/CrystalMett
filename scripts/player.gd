@@ -241,6 +241,6 @@ func _integrate_forces(state):
 				elif o.item == "einstein":
 					get_node("Item").set_texture(item_einstein)
 					get_node("ItemPlayer").play("item")
-					pig_max_carry = 5
+					pig_max_carry = 10
 					o.queue_free()
 					
