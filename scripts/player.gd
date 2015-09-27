@@ -37,8 +37,10 @@ const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
 const item_colorchange = preload("res://gfx/BonusColorchange.png")
 const item_dynamite = preload("res://gfx/BonusDynamite.png")
 const item_gear = preload("res://gfx/gear.png")
-const item_einstein = preload("res://gfx/gear.png")
+const item_einstein = preload("res://gfx/BonusEinstein.png")
 var animPlayer = null
+
+var push_timer = 0
 
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
@@ -56,6 +58,7 @@ func _ready():
 		get_node("PlayerSprite/shirt_crystal").set_modulate(team4)
 
 	add_to_group("zsort")
+	add_to_group("player")
 
 	set_fixed_process(true)
 	get_node("PlayerSprite").set_texture(player_sprite_normal)
@@ -64,6 +67,7 @@ func _ready():
 	animPlayer.play("walk")
 	
 func _fixed_process(delta):
+	push_timer -= delta
 	var mv = get_linear_velocity()
 	var walking = false
 	
@@ -89,7 +93,7 @@ func _fixed_process(delta):
 		
 		if pig_more_time_counter > pig_max_more_time:
 			pig_max_carry = 5
-	
+			
 	if (Input.is_action_pressed("down_0") || Input.get_joy_axis(joystick_number, 1) > jostick_axis_treshhold):
 		walking = true
 		if mv.y < move_max:
@@ -172,11 +176,67 @@ func _integrate_forces(state):
 		for x in range(state.get_contact_count()):
 			var o = state.get_contact_collider_object(x)
 			if "pig" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
 				is_carrying = true
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
 				get_node("fire").set_amount(16)
+			elif "player" in o.get_groups():
+				if get_linear_velocity().length() > o.get_linear_velocity().length() && push_timer <= 0:
+					push_timer = 1
+					o.push_timer = 1
+					if o.is_carrying && !is_carrying:
+						if o.get_node("PlayerSprite").get_texture() == o.player_sprite_crystal:
+							# Crystal hinzufügen
+							get_node("PlayerSprite").set_texture(player_sprite_crystal)
+							is_carrying = true
+							get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
+							get_node("fire").set_amount(o.get_node("fire").get_amount())
+							pig_carry_counter = o.pig_carry_counter
+							get_node("fire").set_amount(o.get_node("fire").get_amount())
+							get_node("fire").set_emitting(o.get_node("fire").is_emitting())
+							# Crystal beim anderen löschen
+							o.get_node("PlayerSprite").set_texture(o.player_sprite_normal)
+							o.is_carrying = false
+							o.get_node("PlayerSprite/shirt_crystal").set_texture(o.player_shirt_normal)
+							o.get_node("fire").set_emitting(false)
+							o.pig_carry_counter = 0
+						elif o.get_node("PlayerSprite").get_texture() == o.player_sprite_bernschwein:
+							# Crystal hinzufügen
+							get_node("PlayerSprite").set_texture(player_sprite_bernschwein)
+							is_carrying = true
+							get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_bernschwein)
+							get_node("fire").set_amount(o.get_node("fire").get_amount())
+							pig_carry_counter = o.pig_carry_counter
+							get_node("fire").set_amount(o.get_node("fire").get_amount())
+							get_node("fire").set_emitting(o.get_node("fire").is_emitting())
+							# Crystal beim anderen löschen
+							o.get_node("PlayerSprite").set_texture(o.player_sprite_normal)
+							o.is_carrying = false
+							o.get_node("PlayerSprite/shirt_crystal").set_texture(o.player_shirt_normal)
+							o.get_node("fire").set_emitting(false)
+							o.pig_carry_counter = 0
+						elif o.get_node("PlayerSprite").get_texture() == o.player_sprite_dynamite:
+							# Crystal hinzufügen
+							get_node("PlayerSprite").set_texture(player_sprite_dynamite)
+							is_carrying = true
+							get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_dynamite)
+							# Crystal beim anderen löschen
+							o.get_node("PlayerSprite").set_texture(o.player_sprite_normal)
+							o.is_carrying = false
+							o.get_node("PlayerSprite/shirt_crystal").set_texture(o.player_shirt_normal)
+						elif o.get_node("PlayerSprite").get_texture() == o.player_sprite_gear:
+							# Crystal hinzufügen
+							get_node("PlayerSprite").set_texture(player_sprite_gear)
+							is_carrying = true
+							get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_gear)
+							# Crystal beim anderen löschen
+							o.get_node("PlayerSprite").set_texture(o.player_sprite_normal)
+							o.is_carrying = false
+							o.get_node("PlayerSprite/shirt_crystal").set_texture(o.player_shirt_normal)
+					o.apply_impulse(get_pos(), get_linear_velocity().normalized()*600)
 			elif "factory" in o.get_groups() && !o.gear_missing && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
 				# Crystal
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
@@ -211,6 +271,8 @@ func _integrate_forces(state):
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				o.gear_missing = false
 			elif "gear" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
 				o.queue_free()
 				get_node("Item").set_texture(item_gear)
 				get_node("ItemPlayer").play("item")
@@ -218,18 +280,19 @@ func _integrate_forces(state):
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_gear)
 				is_carrying = true
 			elif "supply" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
+				o.queue_free()
 				if o.item == "bernschwein":
 					get_node("PlayerSprite").set_texture(player_sprite_bernschwein)
 					is_carrying = true
 					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_bernschwein)
 					get_node("Item").set_texture(item_bernschwein)
 					get_node("ItemPlayer").play("item")
-					o.queue_free()
 					get_node("fire").set_amount(16)
 				elif o.item == "colorchange":
 					get_node("Item").set_texture(item_colorchange)
 					get_node("ItemPlayer").play("item")
-					o.queue_free()
 					get_parent().rotate_factory_teams()
 				elif o.item == "dynamite":
 					get_node("Item").set_texture(item_dynamite)
@@ -237,10 +300,7 @@ func _integrate_forces(state):
 					get_node("PlayerSprite").set_texture(player_sprite_dynamite)
 					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_dynamite)
 					is_carrying = true
-					o.queue_free()
 				elif o.item == "einstein":
 					get_node("Item").set_texture(item_einstein)
 					get_node("ItemPlayer").play("item")
 					pig_max_carry = 10
-					o.queue_free()
-					
