@@ -37,7 +37,7 @@ const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
 const item_colorchange = preload("res://gfx/BonusColorchange.png")
 const item_dynamite = preload("res://gfx/BonusDynamite.png")
 const item_gear = preload("res://gfx/gear.png")
-const item_einstein = preload("res://gfx/gear.png")
+const item_einstein = preload("res://gfx/BonusEinstein.png")
 var animPlayer = null
 
 var push_timer = 0
