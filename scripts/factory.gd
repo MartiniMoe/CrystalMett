@@ -52,9 +52,10 @@ func process_pig(pig_type):
 			get_node("../GUI/Score_LR/score").set_text(str(int(get_node("../GUI/Score_LR/score").get_text())+points_normal))
 			get_node("../GUI/Score_LR/AnimationPlayer").play("score")
 		emit_signal("pollute", get_name())
-	if pig_type == "bernschwein":
+	elif pig_type == "dynamite":
+		pass
+	elif pig_type == "bernschwein":
 		process_time = 4
-		print("processing bernschwein")
 		get_node("AnimationPlayer").play("Processing")
 		if get_name() == "Factory_UL":
 			get_node("../GUI/Score_UL/score").set_text(str(int(get_node("../GUI/Score_UL/score").get_text())+points_bernschwein))
