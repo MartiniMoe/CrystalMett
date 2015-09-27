@@ -91,13 +91,15 @@ func set_hole(x,y, factory):
 	var new_hole = get_cell(x,y)
 	print("Es folgen Koordinaten:")
 	var new_hole_pos = map_to_world(vec2(x,y))
+	new_hole_pos = vec2(new_hole_pos.x, new_hole_pos.y+10)
 	var new_rift = pl_rift.instance()
 	get_parent().add_child(new_rift)
 	var fac_pos = get_parent().get_node(factory).get_pos()
 	new_rift.set_pos(fac_pos)
 	var distance = fac_pos.distance_to(new_hole_pos)
-	var angle = rad2deg(fac_pos.angle_to(new_hole_pos))
-	new_rift.set_rot(angle+90)
+	#var angle = rad2deg(fac_pos.angle_to(new_hole_pos))
+	var angle = fac_pos.angle_to_point(new_hole_pos)+0.5*3.1416
+	new_rift.set_rot(angle)
 	new_rift.set_scale(vec2(distance/new_rift.get_texture().get_width(),1))
 	
 	
