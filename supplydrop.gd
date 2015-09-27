@@ -10,6 +10,8 @@ var rnd_items = ["bernschwein", "dynamite",
 "colorchange"]
 
 func _ready():
+	set_collision_mask(4)
+	set_layer_mask(4)
 	add_to_group("supply")
 	get_node("AnimationPlayer").play("fly")
 	set_linear_velocity(vec2(0, 80))
@@ -22,6 +24,8 @@ func _fixed_process(delta):
 			get_node("AnimationPlayer").play("land")
 			get_node("Box").set_rot(0)
 			flying = false
+			set_collision_mask(1)
+			set_layer_mask(1)
 			set_linear_velocity(vec2(0, 0))
 			get_node("BoxCollision").set_trigger(false)
 		else:
