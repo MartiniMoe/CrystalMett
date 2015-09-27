@@ -55,6 +55,8 @@ func _ready():
 	if team == 3:
 		get_node("PlayerSprite/shirt_crystal").set_modulate(team4)
 
+	add_to_group("zsort")
+
 	set_fixed_process(true)
 	get_node("PlayerSprite").set_texture(player_sprite_normal)
 	is_carrying = false

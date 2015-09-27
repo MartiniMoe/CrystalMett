@@ -20,4 +20,5 @@ func _fixed_process(delta):
 			set_layer_mask(1)
 			flying = false
 			set_rot(0)
+			get_node("AnimationPlayer").play("land")
 			fly_timer = 0

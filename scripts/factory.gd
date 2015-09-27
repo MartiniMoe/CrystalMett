@@ -23,6 +23,7 @@ const gear = preload("res://gear.scn")
 
 func _ready():
 	add_to_group("factory")
+	add_to_group("zsort")
 	set_fixed_process(true)
 
 func _fixed_process(delta):
