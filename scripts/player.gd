@@ -176,6 +176,8 @@ func _integrate_forces(state):
 		for x in range(state.get_contact_count()):
 			var o = state.get_contact_collider_object(x)
 			if "pig" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
 				o.queue_free()
 				get_node("PlayerSprite").set_texture(player_sprite_crystal)
 				is_carrying = true
@@ -269,6 +271,8 @@ func _integrate_forces(state):
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				o.gear_missing = false
 			elif "gear" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
 				o.queue_free()
 				get_node("Item").set_texture(item_gear)
 				get_node("ItemPlayer").play("item")
@@ -276,18 +280,19 @@ func _integrate_forces(state):
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_gear)
 				is_carrying = true
 			elif "supply" in o.get_groups() && !is_carrying:
+				o.set_collision_mask(8)
+				o.set_layer_mask(8)
+				o.queue_free()
 				if o.item == "bernschwein":
 					get_node("PlayerSprite").set_texture(player_sprite_bernschwein)
 					is_carrying = true
 					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_bernschwein)
 					get_node("Item").set_texture(item_bernschwein)
 					get_node("ItemPlayer").play("item")
-					o.queue_free()
 					get_node("fire").set_amount(16)
 				elif o.item == "colorchange":
 					get_node("Item").set_texture(item_colorchange)
 					get_node("ItemPlayer").play("item")
-					o.queue_free()
 					get_parent().rotate_factory_teams()
 				elif o.item == "dynamite":
 					get_node("Item").set_texture(item_dynamite)
@@ -295,10 +300,7 @@ func _integrate_forces(state):
 					get_node("PlayerSprite").set_texture(player_sprite_dynamite)
 					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_dynamite)
 					is_carrying = true
-					o.queue_free()
 				elif o.item == "einstein":
 					get_node("Item").set_texture(item_einstein)
 					get_node("ItemPlayer").play("item")
 					pig_max_carry = 10
-					o.queue_free()
-					
