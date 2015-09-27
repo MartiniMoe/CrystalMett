@@ -1,11 +1,14 @@
 
 extends Node2D
 
-# member variables here, example:
-# var a=2
-# var b="textvar"
+const GS_RUNNING = 1
+const GS_PAUSE = 2
+const GS_GAME_OVER = 3
 
-# ???
+var game_state = 0
+var prev_game_state = 0
+var next_game_state = GS_RUNNING
+
 var field_size = int(34 / 2)
 var space_to_edge_x = 5
 var space_to_edge_y = 7
@@ -16,6 +19,8 @@ var pig_spawn_time = 0
 var supply_spawn_delay = 10
 var supply_spawn_time = 0
 
+var menu_pause = null
+
 #const factory = preload("res://factory.scn")
 const pig = preload("res://pig.scn")
 const supply = preload("res://supplydrop.scn")
@@ -25,25 +30,30 @@ var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
 
-func _ready():
-	set_process(true)
-	# Initialization here
+func new_game():
 	randomize()
+	menu_pause = get_node("GUI/Menu_Pause")
 	
 	get_node("Factory_LL").team = 0
 	get_node("Factory_LR").team = 1
 	get_node("Factory_UL").team = 2
 	get_node("Factory_UR").team = 3
 	
-	get_node("Factory_LL").colorize()
-	get_node("Factory_LR").colorize()
-	get_node("Factory_UL").colorize()
-	get_node("Factory_UR").colorize()
-	
 	get_node("GUI/Score_LL/score").set_text("0")
 	get_node("GUI/Score_LR/score").set_text("0")
 	get_node("GUI/Score_UL/score").set_text("0")
 	get_node("GUI/Score_UR/score").set_text("0")
+	
+	get_node("Factory_LL").colorize()
+	get_node("Factory_LR").colorize()
+	get_node("Factory_UL").colorize()
+	get_node("Factory_UR").colorize()
+
+	
+func _ready():
+	set_process(true)
+	
+	new_game()
 	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!
@@ -74,15 +84,38 @@ func _ready():
 		add_child(fact)"""
 
 func _process(delta):
-	time_elapsed += delta
+	prev_game_state = game_state
+	game_state = next_game_state
 	
+	if (game_state != prev_game_state):
+		print("GAME STATE CHANGED!")
+		print(game_state)
+	
+	if (game_state == GS_RUNNING):
+		gs_running(delta)
+	elif (game_state == GS_GAME_OVER):
+		gs_game_over(delta)
+	elif (game_state == GS_PAUSE):
+		gs_pause(delta)
+		
+		
+func gs_running(delta):
+
+	if (prev_game_state == GS_RUNNING):
+		time_elapsed += delta
+	
+	if (Input.is_action_pressed("pause_game")):
+		next_game_state = GS_PAUSE
+	
+	# Spawn those chyristal pigs
 	if (time_elapsed > pig_spawn_time+pig_spawn_delay):
 		pig_spawn_time = time_elapsed
 		var piglet = pig.instance()
 		piglet.get_node("AnimationPlayer").play("spawn")
-		
 		piglet.set_pos(vec2(rand_range(-100,100),rand_range(-100,100)))
 		add_child(piglet)
+	
+	# Spawn suppy drops
 	if (time_elapsed > supply_spawn_time+supply_spawn_delay):
 		supply_spawn_time = time_elapsed
 		var new_supply = supply.instance()
@@ -91,6 +124,19 @@ func _process(delta):
 		new_supply.destination = vec2(destination)
 		new_supply.set_pos(vec2(destination.x, -800))
 		add_child(new_supply)
+
+	
+func gs_pause(delta):
+	if (prev_game_state != GS_PAUSE):
+		get_tree().set_pause(true)
+		menu_pause.show()
+	if (Input.is_action_pressed("pause_game")):
+		menu_pause.hide()
+		get_tree().set_pause(false)
+		next_game_state = GS_RUNNING
+
+func gs_game_over(delta):
+	next_game_state = GS_GAME_OVER
 
 func rotate_factory_teams():
 	var teams = [0, 1, 2, 3]
