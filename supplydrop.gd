@@ -4,7 +4,10 @@ var destination = vec2()
 var flying = true
 var item = null
 
-var rnd_items = ["bernschwein", "colorchange", "dynamite"]
+var rnd_items = ["bernschwein", "dynamite", 
+"bernschwein", "dynamite", 
+"bernschwein", "dynamite", 
+"colorchange"]
 
 func _ready():
 	add_to_group("supply")

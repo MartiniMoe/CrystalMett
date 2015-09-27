@@ -9,6 +9,8 @@ var processing = false
 var process_timer = 0
 var process_time = 2
 
+var gear_missing = false
+
 var points_normal = 1
 var points_bernschwein = 4
 
@@ -16,6 +18,8 @@ var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
+
+const gear = preload("res://gear.scn")
 
 func _ready():
 	add_to_group("factory")
@@ -53,7 +57,15 @@ func process_pig(pig_type):
 			get_node("../GUI/Score_LR/AnimationPlayer").play("score")
 		emit_signal("pollute", get_name())
 	elif pig_type == "dynamite":
-		pass
+		processing = false
+		process_time = 0
+		get_node("AnimationPlayer").play("Exploding")
+		var new_gear = gear.instance()
+		get_parent().add_child(new_gear)
+		new_gear.set_pos(get_pos())
+		new_gear.set_linear_velocity(-get_pos().normalized()*200)
+		#new_gear.set_angular_velocity(3)
+		gear_missing = true
 	elif pig_type == "bernschwein":
 		process_time = 4
 		get_node("AnimationPlayer").play("Processing")

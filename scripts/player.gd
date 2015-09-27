@@ -16,15 +16,25 @@ var mov_y = 0
 
 var is_carrying = false
 
+const factory_normal = preload("res://gfx/factory.png")
+const factory_closed = preload("res://gfx/FactorySign.png")
+
 const player_sprite_normal = preload("res://gfx/player.png")
 const player_sprite_crystal = preload("res://gfx/PlayerCrystal.png")
 const player_sprite_bernschwein = preload("res://gfx/PlayerBernschwein.png")
 const player_sprite_dynamite = preload("res://gfx/PlayerDynamite.png")
+const player_sprite_gear = preload("res://gfx/PlayerGear.png")
+
 const player_shirt_normal = preload("res://gfx/player_Shirt.png")
 const player_shirt_crystal = preload("res://gfx/PlayerCrystal_Shirt.png")
+const player_shirt_bernschwein = preload("res://gfx/PlayerBernschweinShirt.png")
+const player_shirt_dynamite = preload("res://gfx/PlayerDynamiteShirt.png")
+const player_shirt_gear = preload("res://gfx/PlayerGearShirt.png")
+
 const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
 const item_colorchange = preload("res://gfx/BonusColorchange.png")
 const item_dynamite = preload("res://gfx/BonusDynamite.png")
+const item_gear = preload("res://gfx/gear.png")
 var animPlayer = null
 
 var team1 = Color(1, 0, 0, 1)
@@ -52,7 +62,7 @@ func _fixed_process(delta):
 	var mv = get_linear_velocity()
 	var walking = false
 	
-	if get_node("PlayerSprite").get_texture() == player_sprite_crystal:
+	if get_node("PlayerSprite").get_texture() == player_sprite_crystal || get_node("PlayerSprite").get_texture() == player_sprite_bernschwein:
 		pig_carry_counter += delta
 		if pig_carry_counter > pig_max_carry:
 			# PIG EXPLODE
@@ -158,33 +168,55 @@ func _integrate_forces(state):
 				is_carrying = true
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
 				get_node("fire").set_amount(16)
-			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
+			elif "factory" in o.get_groups() && !o.gear_missing && get_node("PlayerSprite").get_texture() == player_sprite_crystal:
+				# Crystal
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
 				is_carrying = false
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				get_node("fire").set_emitting(false)
 				pig_carry_counter = 0
 				o.process_pig("normal")
-			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_bernschwein:
+			elif "factory" in o.get_groups() && !o.gear_missing && get_node("PlayerSprite").get_texture() == player_sprite_bernschwein:
+				# Bernschwein
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
 				is_carrying = false
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				get_node("fire").set_emitting(false)
 				pig_carry_counter = 0
 				o.process_pig("bernschwein")
-			elif "factory" in o.get_groups() && get_node("PlayerSprite").get_texture() == player_sprite_dynamite:
+			elif "factory" in o.get_groups() && !o.gear_missing && get_node("PlayerSprite").get_texture() == player_sprite_dynamite:
+				# Dynamite
+				o.get_node("Sprite").set_texture(factory_closed)
+				o.get_node("Sprite").set_hframes(1)
+				o.get_node("Sprite").set_frame(0)
 				get_node("PlayerSprite").set_texture(player_sprite_normal)
 				is_carrying = false
 				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
 				o.process_pig("dynamite")
+			elif "factory" in o.get_groups() && o.gear_missing && get_node("PlayerSprite").get_texture() == player_sprite_gear:
+				# Gear
+				o.get_node("Sprite").set_texture(factory_normal)
+				o.get_node("Sprite").set_hframes(6)
+				get_node("PlayerSprite").set_texture(player_sprite_normal)
+				is_carrying = false
+				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_normal)
+				o.gear_missing = false
+			elif "gear" in o.get_groups() && !is_carrying:
+				o.queue_free()
+				get_node("Item").set_texture(item_gear)
+				get_node("ItemPlayer").play("item")
+				get_node("PlayerSprite").set_texture(player_sprite_gear)
+				get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_gear)
+				is_carrying = true
 			elif "supply" in o.get_groups() && !is_carrying:
 				if o.item == "bernschwein":
 					get_node("PlayerSprite").set_texture(player_sprite_bernschwein)
 					is_carrying = true
-					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
+					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_bernschwein)
 					get_node("Item").set_texture(item_bernschwein)
 					get_node("ItemPlayer").play("item")
 					o.queue_free()
+					get_node("fire").set_amount(16)
 				elif o.item == "colorchange":
 					get_node("Item").set_texture(item_colorchange)
 					get_node("ItemPlayer").play("item")
@@ -194,7 +226,7 @@ func _integrate_forces(state):
 					get_node("Item").set_texture(item_dynamite)
 					get_node("ItemPlayer").play("item")
 					get_node("PlayerSprite").set_texture(player_sprite_dynamite)
-					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_crystal)
+					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_dynamite)
 					is_carrying = true
 					o.queue_free()
 					
