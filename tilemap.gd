@@ -87,12 +87,15 @@ var fence_right_top = ""
 const pl_rift = preload("res://rift.scn")
 
 func set_hole(x,y, factory):
+	var flip_rift = randi()%2
 	set_cell(x, y, get_tileset().find_tile_by_name("Hole01"))
 	var new_hole = get_cell(x,y)
 	#print("Es folgen Koordinaten:")
 	var new_hole_pos = map_to_world(vec2(x,y))
 	new_hole_pos = vec2(new_hole_pos.x, new_hole_pos.y+10)
 	var new_rift = pl_rift.instance()
+	if flip_rift == 1:
+		new_rift.set_flip_h(true)
 	get_parent().add_child(new_rift)
 	var fac_pos = get_parent().get_node(factory).get_pos()
 	new_rift.set_pos(fac_pos)

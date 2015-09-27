@@ -5,7 +5,7 @@ const GS_RUNNING = 1
 const GS_PAUSE = 2
 const GS_GAME_OVER = 3
 
-var scoregoal = 1
+var scoregoal = 20
 
 var game_state = 0
 var prev_game_state = 0
