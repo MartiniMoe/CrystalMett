@@ -48,12 +48,15 @@ func new_game():
 	get_node("Factory_LR").colorize()
 	get_node("Factory_UL").colorize()
 	get_node("Factory_UR").colorize()
-
+	
+	print("INIT")
 	
 func _ready():
-	set_process(true)
+	set_fixed_process(true)
 	
 	new_game()
+	
+	
 	
 	for i in range(4):
 		# This is art. Bitte halten sie mindestens einen Meter Abstand!
@@ -82,8 +85,10 @@ func _ready():
 		#fact.get_node("Sprite").set_frame((foo + 1) % 4)
 		#fact.get_node(str((foo + 1) % 4)).set_name("smoke")
 		add_child(fact)"""
+	
 
-func _process(delta):
+
+func _fixed_process(delta):
 	prev_game_state = game_state
 	game_state = next_game_state
 	
@@ -97,7 +102,13 @@ func _process(delta):
 		gs_game_over(delta)
 	elif (game_state == GS_PAUSE):
 		gs_pause(delta)
-		
+	
+
+	for obj in get_children():
+		if ("zsort" in obj.get_groups()):
+			obj.set_z(obj.get_pos().y+get_viewport_rect().size.height/2)
+			
+			
 		
 func gs_running(delta):
 

@@ -1,4 +1,4 @@
-extends TileMap
+ extends TileMap
 
 # member variables here, example:
 # var a=2
@@ -89,7 +89,7 @@ const pl_rift = preload("res://rift.scn")
 func set_hole(x,y, factory):
 	set_cell(x, y, get_tileset().find_tile_by_name("Hole01"))
 	var new_hole = get_cell(x,y)
-	print("Es folgen Koordinaten:")
+	#print("Es folgen Koordinaten:")
 	var new_hole_pos = map_to_world(vec2(x,y))
 	new_hole_pos = vec2(new_hole_pos.x, new_hole_pos.y+10)
 	var new_rift = pl_rift.instance()
