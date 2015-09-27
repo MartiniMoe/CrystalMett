@@ -5,6 +5,8 @@ const GS_RUNNING = 1
 const GS_PAUSE = 2
 const GS_GAME_OVER = 3
 
+var scoregoal = 1
+
 var game_state = 0
 var prev_game_state = 0
 var next_game_state = GS_RUNNING
@@ -29,6 +31,10 @@ var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
+
+var state_time_elapsed = 0
+
+var debounce = .25
 
 func new_game():
 	randomize()
@@ -84,12 +90,14 @@ func _ready():
 		add_child(fact)"""
 
 func _process(delta):
+
+	#State Machine:
 	prev_game_state = game_state
 	game_state = next_game_state
 	
-	if (game_state != prev_game_state):
-		print("GAME STATE CHANGED!")
-		print(game_state)
+	if (prev_game_state != game_state):
+		state_time_elapsed =0
+	state_time_elapsed += delta
 	
 	if (game_state == GS_RUNNING):
 		gs_running(delta)
@@ -98,6 +106,7 @@ func _process(delta):
 	elif (game_state == GS_PAUSE):
 		gs_pause(delta)
 	
+	#Z-Sorting:
 	for obj in get_children():
 		if ("zsort" in obj.get_groups()):
 			obj.set_z(obj.get_pos().y + get_viewport_rect().size.height)
@@ -107,8 +116,28 @@ func gs_running(delta):
 	if (prev_game_state == GS_RUNNING):
 		time_elapsed += delta
 	
-	if (Input.is_action_pressed("pause_game")):
+	if (state_time_elapsed > debounce &&  Input.is_action_pressed("pause_game")):
 		next_game_state = GS_PAUSE
+		
+	var score_ul = int (get_node("GUI/Score_UL/score").get_text() )
+	var score_ur = int (get_node("GUI/Score_UR/score").get_text() )
+	var score_ll = int (get_node("GUI/Score_LL/score").get_text() )
+	var score_lr = int (get_node("GUI/Score_LR/score").get_text() )
+	
+	var winning_player = ""
+	if (score_ul >= scoregoal):
+		winning_player = "UPPER LEFT"
+	elif (score_ur >= scoregoal):
+		winning_player = "UPPER RIGHT"
+	elif (score_ll >= scoregoal):
+		winning_player = "LOWER LEFT"
+	elif (score_lr >= scoregoal):
+		winning_player = "LOWER RIGHT"
+		
+	if (winning_player != ""):
+		get_node("GUI/Menu_Victory/L_Victory").set_text(winning_player + " PLAYER WINS!!!")
+		next_game_state = GS_GAME_OVER
+		get_node("GUI/Menu_Victory").show()
 	
 	# Spawn those chyristal pigs
 	if (time_elapsed > pig_spawn_time+pig_spawn_delay):
@@ -132,14 +161,18 @@ func gs_running(delta):
 func gs_pause(delta):
 	if (prev_game_state != GS_PAUSE):
 		get_tree().set_pause(true)
+		menu_pause.time_elapsed = 0
 		menu_pause.show()
-	if (Input.is_action_pressed("pause_game")):
+	elif (state_time_elapsed > debounce && Input.is_action_pressed("pause_game")):
 		menu_pause.hide()
 		get_tree().set_pause(false)
 		next_game_state = GS_RUNNING
 
 func gs_game_over(delta):
 	next_game_state = GS_GAME_OVER
+	if (prev_game_state != GS_GAME_OVER):
+		get_node("GUI/Menu_Victory").show()
+		get_tree().set_pause(true)
 
 func rotate_factory_teams():
 	var teams = [0, 1, 2, 3]
