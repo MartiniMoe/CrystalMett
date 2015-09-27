@@ -10,6 +10,8 @@ var jostick_axis_treshhold = 0.5
 
 var pig_carry_counter = 0
 var pig_max_carry = 5
+var pig_more_time_counter = 0
+var pig_max_more_time = 20
 
 var mov_x = 0
 var mov_y = 0
@@ -35,6 +37,7 @@ const item_bernschwein = preload("res://gfx/BonusBernschwein.png")
 const item_colorchange = preload("res://gfx/BonusColorchange.png")
 const item_dynamite = preload("res://gfx/BonusDynamite.png")
 const item_gear = preload("res://gfx/gear.png")
+const item_einstein = preload("res://gfx/gear.png")
 var animPlayer = null
 
 var team1 = Color(1, 0, 0, 1)
@@ -64,6 +67,8 @@ func _fixed_process(delta):
 	
 	if get_node("PlayerSprite").get_texture() == player_sprite_crystal || get_node("PlayerSprite").get_texture() == player_sprite_bernschwein:
 		pig_carry_counter += delta
+		pig_more_time_counter += delta
+		
 		if pig_carry_counter > pig_max_carry:
 			# PIG EXPLODE
 			pig_carry_counter = 0
@@ -80,6 +85,8 @@ func _fixed_process(delta):
 			get_node("fire").set_amount(16)
 			get_node("fire").set_emitting(true)
 		
+		if pig_more_time_counter > pig_max_more_time:
+			pig_max_carry = 5
 	
 	if (Input.is_action_pressed("down_0") || Input.get_joy_axis(joystick_number, 1) > jostick_axis_treshhold):
 		walking = true
@@ -228,5 +235,10 @@ func _integrate_forces(state):
 					get_node("PlayerSprite").set_texture(player_sprite_dynamite)
 					get_node("PlayerSprite/shirt_crystal").set_texture(player_shirt_dynamite)
 					is_carrying = true
+					o.queue_free()
+				elif o.item == "einstein":
+					get_node("Item").set_texture(item_einstein)
+					get_node("ItemPlayer").play("item")
+					pig_max_carry = 5
 					o.queue_free()
 					
