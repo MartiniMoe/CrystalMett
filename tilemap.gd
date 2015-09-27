@@ -84,14 +84,24 @@ var fence_bottom_right = ""
 var fence_right = ""
 var fence_right_top = ""
 
+const pl_rift = preload("res://rift.scn")
+
+func set_hole(x,y, factory):
+	set_cell(x, y, get_tileset().find_tile_by_name("Hole01"))
+	var new_hole = get_cell(x,y)
+	print("Es folgen Koordinaten:")
+	var new_hole_pos = map_to_world(vec2(x,y))
+	var new_rift = pl_rift.instance()
+	get_parent().add_child(new_rift)
+	var fac_pos = get_parent().get_node(factory).get_pos()
+	new_rift.set_pos(fac_pos)
+	var distance = fac_pos.distance_to(new_hole_pos)
+	var angle = rad2deg(fac_pos.angle_to(new_hole_pos))
+	new_rift.set_rot(angle+90)
+	new_rift.set_scale(vec2(distance/new_rift.get_texture().get_width(),1))
+	
+	
 func create_hole(id):
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
-	print("LOLOLOLOLOLO")
 	
 	randomize()
 	
@@ -141,7 +151,7 @@ func create_hole(id):
 					last_tile_no_hole_y = y
 				
 				if fast_forward and tile_type != get_tileset().find_tile_by_name("Hole01"):
-					set_cell(x + offset_x, y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+					set_hole(x + offset_x, y + offset_y - 1,id)
 					return
 				elif fast_forward:
 					continue
@@ -149,12 +159,12 @@ func create_hole(id):
 				if counter == selected_tile:
 					if tile_type == get_tileset().find_tile_by_name("Hole01"):
 						if alt_strategy == -1:
-							set_cell(last_tile_no_hole_x + offset_x, last_tile_no_hole_y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+							set_hole(last_tile_no_hole_x + offset_x, last_tile_no_hole_y + offset_y - 1,id)
 							return
 						else:
 							fast_forward = true
 					else:
-						set_cell(x + offset_x, y + offset_y - 1, get_tileset().find_tile_by_name("Hole01"))
+						set_hole(x + offset_x, y + offset_y - 1,id)
 						return
 				else:			
 					counter += 1
