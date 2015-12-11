@@ -4,6 +4,7 @@ extends Node2D
 const GS_RUNNING = 1
 const GS_PAUSE = 2
 const GS_GAME_OVER = 3
+const GS_RESTART = 4
 
 var scoregoal = 20
 
@@ -54,7 +55,7 @@ func new_game():
 	get_node("Factory_LR").colorize()
 	get_node("Factory_UL").colorize()
 	get_node("Factory_UR").colorize()
-
+	next_game_state = GS_RUNNING
 	
 func _ready():
 	set_process(true)
@@ -191,3 +192,7 @@ func rotate_factory_teams():
 	get_node("Factory_LR").colorize()
 	get_node("Factory_UL").colorize()
 	get_node("Factory_UR").colorize()
+
+func _on_GUI_restart_game():
+	#new_game()
+	get_tree().change_scene("res://main.scn")
