@@ -74,7 +74,7 @@ func _ready():
 		
 		"""var fact = factory.instance()
 		
-		fact.set_pos(vec2(x, y))
+		fact.set_pos(Vector2(x, y))
 		var foo = 0
 		
 		if i == 2:
@@ -145,17 +145,17 @@ func gs_running(delta):
 		pig_spawn_time = time_elapsed
 		var piglet = pig.instance()
 		piglet.get_node("AnimationPlayer").play("spawn")
-		piglet.set_pos(vec2(rand_range(-100,100),rand_range(-100,100)))
+		piglet.set_pos(Vector2(rand_range(-100,100),rand_range(-100,100)))
 		add_child(piglet)
 	
 	# Spawn suppy drops
 	if (time_elapsed > supply_spawn_time+supply_spawn_delay):
 		supply_spawn_time = time_elapsed
 		var new_supply = supply.instance()
-		#var destination = vec2(rand_range(0, get_viewport_rect().size.width), rand_range(0, get_viewport_rect().size.height))
-		var destination = vec2(rand_range(-300, 300), rand_range(-200, 200)-120)
-		new_supply.destination = vec2(destination)
-		new_supply.set_pos(vec2(destination.x, -800))
+		#var destination = Vector2(rand_range(0, get_viewport_rect().size.width), rand_range(0, get_viewport_rect().size.height))
+		var destination = Vector2(rand_range(-300, 300), rand_range(-200, 200)-120)
+		new_supply.destination = Vector2(destination)
+		new_supply.set_pos(Vector2(destination.x, -800))
 		add_child(new_supply)
 
 	

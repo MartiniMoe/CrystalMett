@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-var destination = vec2()
+var destination = Vector2()
 var flying = true
 var item = null
 
@@ -17,7 +17,7 @@ func _ready():
 	set_layer_mask(4)
 	add_to_group("supply")
 	get_node("AnimationPlayer").play("fly")
-	set_linear_velocity(vec2(0, 80))
+	set_linear_velocity(Vector2(0, 80))
 	set_fixed_process(true)
 	item = rnd_items[int(rand_range(0, rnd_items.size()))]
 	
@@ -29,7 +29,7 @@ func _fixed_process(delta):
 			flying = false
 			set_collision_mask(1)
 			set_layer_mask(1)
-			set_linear_velocity(vec2(0, 0))
+			set_linear_velocity(Vector2(0, 0))
 			get_node("BoxCollision").set_trigger(false)
 		else:
-			set_linear_velocity(vec2(0, 80))
+			set_linear_velocity(Vector2(0, 80))

@@ -12,10 +12,10 @@ func _ready():
 func _fixed_process(delta):
 	if flying:
 		fly_timer += delta
-		apply_impulse(get_pos(), vec2(0, 0.5))
+		apply_impulse(get_pos(), Vector2(0, 0.5))
 		set_angular_velocity(0.2)
 		if fly_timer > fly_time:
-			set_linear_velocity(vec2(0,0))
+			set_linear_velocity(Vector2(0,0))
 			set_collision_mask(1)
 			set_layer_mask(1)
 			flying = false
