@@ -282,7 +282,7 @@ func _integrate_forces(state):
 				elif o.item == "colorchange":
 					sprite_item.set_texture(item_colorchange)
 					anim_item.play("item")
-					get_parent().rotate_factory_teams()
+					get_node("/root/MainNode").rotate_factory_teams()
 				elif o.item == "dynamite":
 					item = ITEM_DYNAMITE
 				elif o.item == "einstein":

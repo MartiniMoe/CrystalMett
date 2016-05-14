@@ -130,7 +130,7 @@ func gs_waitforplayers(delta):
 				if (!get_node("Players").has_node("Player"+str(i))):
 					print("Button has been presed!")
 					#Reset countdown after two Players have joined the game:
-					if (get_node("Players").get_child_count() == 1):
+					if (get_node("Players").get_child_count() == 2):
 						time_elapsed = 0 #Reset Timer
 						next_game_state = GS_RUNNING
 					
