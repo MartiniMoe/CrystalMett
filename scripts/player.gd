@@ -73,6 +73,13 @@ func _ready():
 	particle_fire = get_node("fire")
 	particle_explosion = get_node("explosion")
 	
+	
+	set_fixed_process(true)
+	set_sprites()
+	
+	anim_player.play("walk")
+	
+func init_player():
 	if team == 0:
 		sprite_shirt.set_modulate(team1)
 	if team == 1:
@@ -82,10 +89,6 @@ func _ready():
 	if team == 3:
 		sprite_shirt.set_modulate(team4)
 
-	set_fixed_process(true)
-	set_sprites()
-	
-	anim_player.play("walk")
 
 func set_sprites():
 	if old_item != item:
@@ -128,19 +131,25 @@ func _fixed_process(delta):
 	if item == ITEM_CRYSTAL || item == ITEM_BERNCRYSTAL:
 		pig_carry_counter += delta
 		pig_more_time_counter += delta
-		
+		leds.set_led(player_number, 1, 255, 0, 255, 1)
+			
 		if pig_carry_counter > pig_max_carry:
 			# PIG EXPLODE
 			pig_carry_counter = 0
 			item = ITEM_NONE
 			particle_fire.set_emitting(false)
 			particle_explosion.set_emitting(true)
+			#dim right LED
+			leds.set_led(player_number, 1, 255, 0, 255, 0)
 		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
 			particle_fire.set_amount(128)
+			leds.set_led(player_number, 1, 255, 0, 255, 7)
 		elif pig_carry_counter > pig_max_carry/2:
 			particle_fire.set_amount(64)
+			leds.set_led(player_number, 1, 255, 0, 255, 5)
 		elif pig_carry_counter > pig_max_carry/3:
 			particle_fire.set_amount(16)
+			leds.set_led(player_number, 1, 255, 0, 255, 4)
 			particle_fire.set_emitting(true)
 		
 		if pig_more_time_counter > pig_max_more_time:

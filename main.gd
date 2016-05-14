@@ -28,7 +28,7 @@ var menu_pause = null
 #const factory = preload("res://factory.scn")
 const pig = preload("res://pig.scn")
 const supply = preload("res://supplydrop.scn")
-
+	
 var pl_player = preload("res://player.scn")
 
 var team1 = Color(1, 0, 0, 1)
@@ -36,9 +36,12 @@ var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
 
+const colarray = [Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1), Color(1, 1, 0)]
+
 var state_time_elapsed = 0
 
 var debounce = .25
+var last_team_assigend = -1
 
 func new_game():
 	randomize()
@@ -129,13 +132,20 @@ func gs_waitforplayers(delta):
 					#Reset countdown after two Players have joined the game:
 					if (get_node("Players").get_child_count() == 1):
 						time_elapsed = 0 #Reset Timer
+						next_game_state = GS_RUNNING
 					
 					print("Player " + str(i) + " has joined the game!")
 					var player = pl_player.instance()
 					player.set_name("Player"+str(i))
 					player.player_number = i
-					
+					last_team_assigend+=1
+					if (last_team_assigend > 3):
+						last_team_assigend = 0
+					player.team = last_team_assigend
 					get_node("Players").add_child(player)
+					player.init_player()
+					leds.set_led(i, 0, colarray[player.team ].r*255, colarray[player.team ].g*255, colarray[player.team ].b*255, 1)
+					leds.set_led(i, 1, 0, 0, 0, 0)
 	
 		
 func gs_running(delta):
