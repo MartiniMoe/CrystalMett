@@ -4,7 +4,12 @@ var destination = Vector2()
 var flying = true
 var item = null
 
-var rnd_items = [
+var rnd_items = ["bernschwein", "dynamite", "einstein",
+"bernschwein", "dynamite", "einstein",
+"bernschwein", "dynamite", "einstein",
+"bernschwein", "dynamite", "einstein",
+"bernschwein", "dynamite", "einstein",
+"bernschwein", "dynamite", "einstein",
 "colorchange"]
 
 func _ready():
