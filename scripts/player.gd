@@ -6,7 +6,8 @@ var move_max = 200
 
 export var joystick_number = 0
 export var team = 0
-var jostick_axis_treshhold = 0.5
+export var player_number = 0
+var joy_tresh = 0.5
 
 var pig_carry_counter = 0
 var pig_max_carry = 5
@@ -145,12 +146,12 @@ func _fixed_process(delta):
 		if pig_more_time_counter > pig_max_more_time:
 			pig_max_carry = 5
 			
-	if (Input.is_action_pressed("down_" + str(joystick_number)) || Input.get_joy_axis(joystick_number, 1) > jostick_axis_treshhold):
+	if Input.get_joy_axis(player_number, 1) > joy_tresh:
 		walking = true
 		if mv.y < move_max:
 			mv.y += move_accel*delta
 			mov_y = 1
-	elif (Input.is_action_pressed("up_" + str(joystick_number)) || Input.get_joy_axis(joystick_number, 1) < -jostick_axis_treshhold):
+	elif Input.get_joy_axis(player_number,  1) < -joy_tresh:
 		walking = true
 		if mv.y > -move_max:
 			mv.y -= move_accel*delta
@@ -163,12 +164,12 @@ func _fixed_process(delta):
 			yv = 0
 		mv.y = sign(mv.y)*yv
 	
-	if (Input.is_action_pressed("right_" + str(joystick_number)) || Input.get_joy_axis(joystick_number, 0) > jostick_axis_treshhold):
+	if Input.get_joy_axis(player_number, 0) > joy_tresh:
 		walking = true
 		if mv.x < move_max:
 			mv.x += move_accel*delta
 			mov_x = 1
-	elif (Input.is_action_pressed("left_" + str(joystick_number)) || Input.get_joy_axis(joystick_number, 0) < -jostick_axis_treshhold):
+	elif Input.get_joy_axis(player_number,  0) < -joy_tresh:
 		walking = true
 		if mv.x > -move_max:
 			mv.x -= move_accel*delta

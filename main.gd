@@ -1,6 +1,7 @@
 
 extends Node2D
 
+const GS_WAIT_FOR_PLAYERS = 0
 const GS_RUNNING = 1
 const GS_PAUSE = 2
 const GS_GAME_OVER = 3
@@ -10,7 +11,7 @@ var scoregoal = 20
 
 var game_state = 0
 var prev_game_state = 0
-var next_game_state = GS_RUNNING
+var next_game_state = GS_WAIT_FOR_PLAYERS
 
 var field_size = int(34 / 2)
 var space_to_edge_x = 5
@@ -27,6 +28,8 @@ var menu_pause = null
 #const factory = preload("res://factory.scn")
 const pig = preload("res://pig.scn")
 const supply = preload("res://supplydrop.scn")
+
+var pl_player = preload("res://player.scn")
 
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
@@ -55,7 +58,7 @@ func new_game():
 	get_node("Factory_LR").colorize()
 	get_node("Factory_UL").colorize()
 	get_node("Factory_UR").colorize()
-	next_game_state = GS_RUNNING
+	next_game_state = GS_WAIT_FOR_PLAYERS
 	
 func _ready():
 	set_process(true)
@@ -100,7 +103,9 @@ func _process(delta):
 		state_time_elapsed =0
 	state_time_elapsed += delta
 	
-	if (game_state == GS_RUNNING):
+	if (game_state == GS_WAIT_FOR_PLAYERS):
+		gs_waitforplayers(delta)
+	elif (game_state == GS_RUNNING):
 		gs_running(delta)
 	elif (game_state == GS_GAME_OVER):
 		gs_game_over(delta)
@@ -111,9 +116,29 @@ func _process(delta):
 	for obj in get_children():
 		if ("zsort" in obj.get_groups()):
 			obj.set_z(obj.get_pos().y + get_viewport_rect().size.height)
+			
+func gs_waitforplayers(delta):
+	if (prev_game_state == GS_WAIT_FOR_PLAYERS):
+		time_elapsed += delta
+	next_game_state = GS_WAIT_FOR_PLAYERS
+	
+	for i in range(0,128):
+			if Input.is_joy_button_pressed(i, 0):
+				if (!get_node("Players").has_node("Player"+str(i))):
+					print("Button has been presed!")
+					#Reset countdown after two Players have joined the game:
+					if (get_node("Players").get_child_count() == 1):
+						time_elapsed = 0 #Reset Timer
+					
+					print("Player " + str(i) + " has joined the game!")
+					var player = pl_player.instance()
+					player.set_name("Player"+str(i))
+					player.player_number = i
+					
+					get_node("Players").add_child(player)
+	
 		
 func gs_running(delta):
-
 	if (prev_game_state == GS_RUNNING):
 		time_elapsed += delta
 	
@@ -157,6 +182,8 @@ func gs_running(delta):
 		new_supply.destination = Vector2(destination)
 		new_supply.set_pos(Vector2(destination.x, -800))
 		add_child(new_supply)
+		
+	
 
 	
 func gs_pause(delta):
