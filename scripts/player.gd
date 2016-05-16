@@ -161,6 +161,8 @@ func _fixed_process(delta):
 		
 		if pig_more_time_counter > pig_max_more_time:
 			pig_max_carry = 5
+	else:
+		leds.set_led(player_number, 1, 0, 0, 0, 0)
 			
 	if Input.get_joy_axis(player_number, 1) > joy_tresh:
 		walking = true
