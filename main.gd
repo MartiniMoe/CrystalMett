@@ -43,6 +43,13 @@ var state_time_elapsed = 0
 var debounce = .25
 var last_team_assigend = -1
 
+var timeout_time = 30 #In Seconds
+var time_remaining = timeout_time
+
+var last_player_number = 0
+var countdown_started = false
+
+
 func new_game():
 	randomize()
 	menu_pause = get_node("GUI/Menu_Pause")
@@ -61,6 +68,7 @@ func new_game():
 	get_node("Factory_LR").colorize()
 	get_node("Factory_UL").colorize()
 	get_node("Factory_UR").colorize()
+	
 	next_game_state = GS_WAIT_FOR_PLAYERS
 	
 func _ready():
@@ -125,14 +133,30 @@ func gs_waitforplayers(delta):
 		time_elapsed += delta
 	next_game_state = GS_WAIT_FOR_PLAYERS
 	
+	#Reset countdown after two Players have joined the game:
+	if (get_node("Players").get_child_count() >= 2):
+		#Start countdown after two Players have joined the game:
+	
+		if (!countdown_started):
+			time_elapsed = 0
+			countdown_started = true
+			time_remaining = timeout_time - time_elapsed
+		else:
+			time_remaining -= delta
+	
+	if (time_remaining <= 0):
+		time_elapsed = 0 #Reset Timer
+		next_game_state = GS_RUNNING
+		get_node("GUI/Menu_Join_Game/Countdown").hide()
+	elif (countdown_started):
+		var m = floor(time_remaining / 60)
+		var s = (int(floor(time_remaining)) % 60)
+		get_node("GUI/Menu_Join_Game/Countdown").set_text(str(m) + ":" + str(s))
+	
 	for i in range(0,128):
 			if Input.is_joy_button_pressed(i, 0):
 				if (!get_node("Players").has_node("Player"+str(i))):
 					print("Button has been presed!")
-					#Reset countdown after two Players have joined the game:
-					if (get_node("Players").get_child_count() == 2):
-						time_elapsed = 0 #Reset Timer
-						next_game_state = GS_RUNNING
 					
 					print("Player " + str(i) + " has joined the game!")
 					var player = pl_player.instance()

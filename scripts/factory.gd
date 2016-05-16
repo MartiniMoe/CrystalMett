@@ -12,7 +12,7 @@ var process_time = 2
 var gear_missing = false
 
 var points_normal = 1
-var points_bernschwein = 4
+var points_bernschwein = 3
 
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)
