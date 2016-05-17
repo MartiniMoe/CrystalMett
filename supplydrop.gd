@@ -7,7 +7,7 @@ var item = null
 var rnd_items = ["bernschwein", "dynamite", 
 "bernschwein", "dynamite",
 "bernschwein", "dynamite",
-"bernschwein", "dynamite",
+"bernschwein", "dynamite", "einstein",
 "bernschwein", "dynamite",
 "bernschwein", "dynamite"
 ]

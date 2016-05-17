@@ -153,14 +153,14 @@ func gs_waitforplayers(delta):
 		var s = (int(floor(time_remaining)) % 60)
 		get_node("GUI/Menu_Join_Game/Countdown").set_text(str(m) + ":" + str(s))
 	
-	for i in range(0,128):
+	for i in range(0,1024):
 			if Input.is_joy_button_pressed(i, 0):
-				if (!get_node("Players").has_node("Player"+str(i))):
+				if (!get_node("Players").has_node(cytrill.get_name(i))):
 					print("Button has been presed!")
 					
-					print("Player " + str(i) + " has joined the game!")
+					print(cytrill.get_name(i) + " has joined the game!")
 					var player = pl_player.instance()
-					player.set_name("Player"+str(i))
+					player.set_name(cytrill.get_name(i))
 					player.player_number = i
 					last_team_assigend+=1
 					if (last_team_assigend > 3):
@@ -168,8 +168,8 @@ func gs_waitforplayers(delta):
 					player.team = last_team_assigend
 					get_node("Players").add_child(player)
 					player.init_player()
-					leds.set_led(i, 0, colarray[player.team ].r*255, colarray[player.team ].g*255, colarray[player.team ].b*255, 1)
-					leds.set_led(i, 1, 0, 0, 0, 0)
+					cytrill.set_led(i, 0, colarray[player.team ].r*255, colarray[player.team ].g*255, colarray[player.team ].b*255, 1)
+					cytrill.set_led(i, 1, 0, 0, 0, 0)
 	
 		
 func gs_running(delta):

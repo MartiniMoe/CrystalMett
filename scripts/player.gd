@@ -10,7 +10,7 @@ export var player_number = 0
 var joy_tresh = 0.5
 
 var pig_carry_counter = 0
-var pig_max_carry = 5
+var pig_max_carry = 8
 var pig_more_time_counter = 0
 var pig_max_more_time = 20
 
@@ -92,8 +92,8 @@ func init_player():
 func _notification(what):
 	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
 		#turn off LEDs on quit:
-		leds.set_led(player_number, 0, 0, 0, 0, 0)
-		leds.set_led(player_number, 1, 0, 0, 0, 0)
+		#leds.set_led(player_number, 0, 0, 0, 0, 0)
+		#leds.set_led(player_number, 1, 0, 0, 0, 0)
 		
 		get_tree().quit() # default behavior
 
@@ -138,7 +138,7 @@ func _fixed_process(delta):
 	if item == ITEM_CRYSTAL || item == ITEM_BERNCRYSTAL:
 		pig_carry_counter += delta
 		pig_more_time_counter += delta
-		leds.set_led(player_number, 1, 255, 0, 255, 1)
+		cytrill.set_led(player_number, 1, 255, 0, 255, 1)
 			
 		if pig_carry_counter > pig_max_carry:
 			# PIG EXPLODE
@@ -147,23 +147,23 @@ func _fixed_process(delta):
 			particle_fire.set_emitting(false)
 			particle_explosion.set_emitting(true)
 			#dim right LED
-			leds.set_led(player_number, 1, 255, 0, 255, 0)
+			cytrill.set_led(player_number, 1, 255, 0, 255, 0)
 		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
 			particle_fire.set_amount(128)
-			leds.set_led(player_number, 1, 255, 0, 255, 7)
+			cytrill.set_led(player_number, 1, 255, 0, 255, 7)
 		elif pig_carry_counter > pig_max_carry/2:
 			particle_fire.set_amount(64)
-			leds.set_led(player_number, 1, 255, 0, 255, 5)
+			cytrill.set_led(player_number, 1, 255, 0, 255, 5)
 		elif pig_carry_counter > pig_max_carry/3:
 			particle_fire.set_amount(16)
-			leds.set_led(player_number, 1, 255, 0, 255, 4)
+			cytrill.set_led(player_number, 1, 255, 0, 255, 4)
 			particle_fire.set_emitting(true)
 		
 		if pig_more_time_counter > pig_max_more_time:
 			pig_max_carry = 5
 	else:
-		leds.set_led(player_number, 1, 0, 0, 0, 0)
-			
+		cytrill.set_led(player_number, 1, 0, 0, 0, 0)
+		
 	if Input.get_joy_axis(player_number, 1) > joy_tresh:
 		walking = true
 		if mv.y < move_max:
