@@ -26,10 +26,10 @@ var supply_spawn_time = 0
 var menu_pause = null
 
 #const factory = preload("res://factory.scn")
-const pig = preload("res://pig.scn")
-const supply = preload("res://supplydrop.scn")
+const pig = preload("res://scenes/pig.scn")
+const supply = preload("res://scenes/supplydrop.scn")
 	
-var pl_player = preload("res://player.scn")
+var pl_player = preload("res://scenes/player.scn")
 
 var team1 = Color(1, 0, 0, 1)
 var team2 = Color(0, 1, 0, 1)

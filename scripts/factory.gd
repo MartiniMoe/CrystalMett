@@ -19,7 +19,7 @@ var team2 = Color(0, 1, 0, 1)
 var team3 = Color(0, 0, 1, 1)
 var team4 = Color(1, 1, 0, 1)
 
-const gear = preload("res://gear.scn")
+const gear = preload("res://scenes/gear.scn")
 
 func _ready():
 	add_to_group("factory")

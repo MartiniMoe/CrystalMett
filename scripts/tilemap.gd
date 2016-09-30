@@ -84,7 +84,7 @@ var fence_bottom_right = ""
 var fence_right = ""
 var fence_right_top = ""
 
-const pl_rift = preload("res://rift.scn")
+const pl_rift = preload("res://scenes/rift.scn")
 
 func set_hole(x,y, factory):
 	var flip_rift = randi()%2
