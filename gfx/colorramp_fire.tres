@@ -1,0 +1,5 @@
+[gd_resource type="Gradient" format=3]
+
+[resource]
+offsets = PackedFloat32Array(0, 0.174263, 0.423593, 0.78731, 0.995532)
+colors = PackedColorArray(0, 0, 0.398201, 0.208333, 1, 0, 0, 0.270833, 1, 0.91629, 0.171402, 1, 0, 0, 0, 0.229167, 0, 0, 0, 0)

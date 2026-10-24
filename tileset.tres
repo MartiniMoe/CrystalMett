@@ -1,0 +1,77 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://gfx/grass1.png" id="1"]
+[ext_resource type="Texture2D" path="res://gfx/mud1.png" id="2"]
+[ext_resource type="Texture2D" path="res://gfx/fence_horz.png" id="3"]
+[ext_resource type="Texture2D" path="res://gfx/fence_vert.png" id="4"]
+[ext_resource type="Texture2D" path="res://gfx/grass2.png" id="5"]
+[ext_resource type="Texture2D" path="res://gfx/grass3.png" id="6"]
+[ext_resource type="Texture2D" path="res://gfx/stein.png" id="7"]
+[ext_resource type="Texture2D" path="res://gfx/Hole.png" id="8"]
+
+[sub_resource type="TileSetAtlasSource" id="src_0"]
+resource_name = "Grass01"
+texture = ExtResource("1")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_1"]
+resource_name = "Mud01"
+texture = ExtResource("2")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_2"]
+resource_name = "fence_horz"
+texture = ExtResource("3")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -4, 32, -4, 32, 4, -32, 4)
+
+[sub_resource type="TileSetAtlasSource" id="src_3"]
+resource_name = "fence_vert"
+texture = ExtResource("4")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2, -19, 2, -19, 2, 19, -2, 19)
+
+[sub_resource type="TileSetAtlasSource" id="src_4"]
+resource_name = "Grass02"
+texture = ExtResource("5")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_5"]
+resource_name = "Grass03"
+texture = ExtResource("6")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="src_6"]
+resource_name = "Stone01"
+texture = ExtResource("7")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(17.6657, -5.11541, 16.3899, 0.219772, 12.4465, 4.62709, -0.659485, 7.75862, -7.50244, 6.83076, -12.2577, 4.62709, -17.013, 0.799683, -17.013, -0.244156, -6.34259, -14.394, -2.28323, -15.3218, 1.77615, -15.6698, 8.15518, -15.2059, 12.2145, -12.7702, 15.462, -9.17479)
+
+[sub_resource type="TileSetAtlasSource" id="src_7"]
+resource_name = "Hole01"
+texture = ExtResource("8")
+texture_region_size = Vector2i(64, 37)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-26.4863, -1.2871, 0.114105, -16.6335, 26.6292, -1.45762, 0.0288696, 14.315)
+
+[resource]
+tile_shape = 1
+tile_layout = 5
+tile_size = Vector2i(62, 35)
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 1
+sources/0 = SubResource("src_0")
+sources/1 = SubResource("src_1")
+sources/2 = SubResource("src_2")
+sources/3 = SubResource("src_3")
+sources/4 = SubResource("src_4")
+sources/5 = SubResource("src_5")
+sources/6 = SubResource("src_6")
+sources/7 = SubResource("src_7")

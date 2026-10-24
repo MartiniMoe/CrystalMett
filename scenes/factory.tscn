@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/factory.gd" id="1"]
+[ext_resource type="Texture2D" path="res://gfx/factory.png" id="2"]
+[ext_resource type="Texture2D" path="res://gfx/factory_shirt.png" id="3"]
+[ext_resource type="Texture2D" path="res://gfx/Smoke.png" id="4"]
+[ext_resource type="Gradient" path="res://gfx/colorramp_factory.tres" id="5"]
+
+[sub_resource type="RectangleShape2D" id="4"]
+size = Vector2(100, 80)
+
+[sub_resource type="Animation" id="5"]
+resource_name = "Exploding"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(4.03152, 65.507), Vector2(4.03152, 65.507), Vector2(4.03152, 65.507)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.985322, 0.985322), Vector2(3, 1.5), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="3"]
+length = 1.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(4.03152, 65.507), Vector2(4.03152, 65.507), Vector2(4.03152, 65.507), Vector2(4.03152, 65.507), Vector2(4.03152, 65.507), Vector2(4.03152, 65.507)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.00128086, -0.00128086, -0.00128086, -0.00128086, -0.0174533, 0.0174533]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.985322, 0.985322), Vector2(0.9, 1.1), Vector2(1.1, 0.9), Vector2(0.8, 1.12), Vector2(0.826475, 1.10076), Vector2(0.852949, 1.08152)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Curve" id="1001"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationLibrary" id="1002"]
+_data = {
+&"Exploding": SubResource("5"),
+&"Processing": SubResource("3")
+}
+
+[node name="Factory" type="StaticBody2D"]
+position = Vector2(-1.1, 0)
+script = ExtResource("1")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(4.03152, 65.507)
+rotation = -0.00128086
+texture = ExtResource("2")
+offset = Vector2(-5.13095, -66.4895)
+hframes = 6
+
+[node name="shirt" type="Sprite2D" parent="Sprite"]
+position = Vector2(-5.94773, -66.2014)
+z_index = 1
+texture = ExtResource("3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 30)
+shape = SubResource("4")
+
+[node name="smoke" type="CPUParticles2D" parent="."]
+position = Vector2(0.0529175, -82.9285)
+emitting = false
+amount = 16
+lifetime = 3
+local_coords = true
+texture = ExtResource("4")
+direction = Vector2(0, -1)
+spread = 20
+gravity = Vector2(0, 9)
+initial_velocity_min = 30
+initial_velocity_max = 40
+angular_velocity_min = 0
+angular_velocity_max = 0
+orbit_velocity_min = 0
+orbit_velocity_max = 0
+angle_min = 0
+angle_max = 0
+scale_amount_min = 1
+scale_amount_max = 1
+scale_amount_curve = SubResource("1001")
+color_ramp = ExtResource("5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.0
+libraries = {
+&"": SubResource("1002")
+}

@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="TileSet" path="res://tileset.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/tilemap.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/factory.tscn" id="4"]
+[ext_resource type="AudioStream" path="res://snds/crystalworlds.ogg" id="5"]
+[ext_resource type="Texture2D" path="res://gfx/Pigpit.png" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/gui.tscn" id="7"]
+
+[node name="MainNode" type="Node2D"]
+position = Vector2(960, 540)
+script = ExtResource("1")
+
+[node name="TileMap" type="TileMapLayer" parent="."]
+position = Vector2(1.85059, -7.62939e-06)
+tile_set = ExtResource("2")
+script = ExtResource("3")
+
+[node name="Factory_UL" parent="." instance=ExtResource("4")]
+position = Vector2(-784.061, -385.183)
+
+[node name="Factory_LL" parent="." instance=ExtResource("4")]
+position = Vector2(-774.164, 389.604)
+
+[node name="Factory_UR" parent="." instance=ExtResource("4")]
+position = Vector2(817.06, -383.452)
+
+[node name="Factory_LR" parent="." instance=ExtResource("4")]
+position = Vector2(806.807, 397.806)
+
+[node name="StreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5")
+
+[node name="Mud" type="Sprite2D" parent="."]
+position = Vector2(18.3975, 37.7068)
+scale = Vector2(1.25, 1.25)
+texture = ExtResource("6")
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="GUI" parent="." instance=ExtResource("7")]
+position = Vector2(-938.366, -527.121)

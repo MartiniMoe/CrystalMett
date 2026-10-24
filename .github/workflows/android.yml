@@ -1,0 +1,118 @@
+name: Android APK
+
+on:
+  push:
+    branches: [master, "claude/**"]
+  workflow_dispatch:
+
+env:
+  GODOT_VERSION: 4.7.2
+  GODOT_URL: https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable
+  ANDROID_API: 37
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Download Godot and export templates
+        run: |
+          curl -fsSL -o godot.zip "$GODOT_URL/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fsSL -o templates.tpz "$GODOT_URL/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          mkdir -p "$RUNNER_TEMP/godot"
+          unzip -q godot.zip -d "$RUNNER_TEMP/godot"
+          rm godot.zip
+          GODOT="$RUNNER_TEMP/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64"
+          chmod +x "$GODOT"
+          echo "GODOT=$GODOT" >> "$GITHUB_ENV"
+          TPL="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$TPL"
+          unzip -q templates.tpz -d "$RUNNER_TEMP/tpl"
+          rm templates.tpz
+          mv "$RUNNER_TEMP"/tpl/templates/* "$TPL/"
+          ls "$TPL"
+
+      - name: Import project
+        run: timeout 600 "$GODOT" --headless --import 2>&1 | tee import.log
+
+      - name: Configure Godot editor settings
+        run: |
+          ls -la ~/.config/godot
+          shopt -s nullglob
+          files=(~/.config/godot/editor_settings-*.tres)
+          test ${#files[@]} -gt 0
+          for f in "${files[@]}"; do
+            echo "export/android/android_sdk_path = \"$ANDROID_HOME\"" >> "$f"
+            echo "export/android/java_sdk_path = \"$JAVA_HOME\"" >> "$f"
+            echo "configured $f"
+          done
+
+      - name: Smoke test (run the game with 4 simulated touch players)
+        run: |
+          timeout 300 "$GODOT" --headless --fixed-fps 60 --quit-after 3600 -- --smoke-test 2>&1 | tee smoke.log
+          # Leak reports at exit are expected when quitting via --quit-after
+          if grep -E "SCRIPT ERROR|Parse Error|ERROR:" smoke.log | grep -v "still in use at exit"; then
+            echo "::error::The game logged errors during the smoke test"
+            exit 1
+          fi
+          grep "has joined the game" smoke.log
+          grep "Game started" smoke.log
+
+      - name: Install Android build template
+        run: |
+          # Same as "Project > Install Android Build Template" in the editor
+          TPL="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p android/build
+          unzip -q "$TPL/android_source.zip" -d android/build
+          echo -n "${GODOT_VERSION}.stable" > android/.build_version
+          touch android/build/.gdignore
+          ls android/build
+          # targetSdk comes from the export preset (gradle_build/target_sdk). The
+          # template's Android Gradle plugin cannot compile against API 37 yet, so
+          # compileSdk stays at the template default.
+          grep -nE "compileSdk|targetSdk|minSdk" android/build/config.gradle || true
+
+      - name: Prepare signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_USER: ${{ secrets.ANDROID_KEYSTORE_USER }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          KS="$RUNNER_TEMP/release.keystore"
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$KS"
+          else
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret, signing with a throwaway key"
+            KEYSTORE_USER=crystalmett
+            KEYSTORE_PASSWORD=crystalmett
+            keytool -genkeypair -noprompt -keystore "$KS" -storepass "$KEYSTORE_PASSWORD" -keypass "$KEYSTORE_PASSWORD" \
+              -alias "$KEYSTORE_USER" -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=CrystalMett, O=CrystalMett, C=DE"
+          fi
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PATH=$KS" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_USER=$KEYSTORE_USER" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=$KEYSTORE_PASSWORD" >> "$GITHUB_ENV"
+
+      - name: Export APK
+        run: |
+          mkdir -p build
+          timeout 1200 "$GODOT" --headless --export-release "Android" build/crystalmett.apk 2>&1 | tee export.log
+          test -s build/crystalmett.apk
+
+      - name: Verify APK
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n1)
+          "$BT/apksigner" verify --print-certs build/crystalmett.apk
+          "$BT/aapt" dump badging build/crystalmett.apk | grep -E "^package|sdkVersion|native-code|application-label:"
+          "$BT/aapt" dump badging build/crystalmett.apk | grep -q "targetSdkVersion:'${ANDROID_API}'"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: crystalmett-apk
+          path: build/crystalmett.apk

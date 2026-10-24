@@ -4,9 +4,8 @@ var move_accel = 800
 var move_deaccel = 800
 var move_max = 200
 
-export var joystick_number = 0
-export var team = 0
-export var player_number = 0
+@export var team = 0
+@export var player_number = 0
 var joy_tresh = 0.5
 
 var pig_carry_counter = 0
@@ -56,120 +55,100 @@ var particle_explosion = null
 
 var push_timer = 0
 
-var team1 = Color(1, 0, 0, 1)
-var team2 = Color(0, 1, 0, 1)
-var team3 = Color(0, 0, 1, 1)
-var team4 = Color(1, 1, 0, 1)
+const team_colors = [Color(1, 0, 0, 1), Color(0, 1, 0, 1), Color(0, 0, 1, 1), Color(1, 1, 0, 1)]
 
 func _ready():
 	add_to_group("zsort")
 	add_to_group("player")
-	
-	anim_player = get_node("anim_player")
-	anim_item = get_node("anim_item")
-	sprite_player = get_node("sprite_player")
-	sprite_shirt = get_node("sprite_player/shirt")
-	sprite_item = get_node("sprite_item")
-	particle_fire = get_node("fire")
-	particle_explosion = get_node("explosion")
-	
-	
-	set_fixed_process(true)
-	set_sprites()
-	
-	anim_player.play("walk")
-	
-func init_player():
-	if team == 0:
-		sprite_shirt.set_modulate(team1)
-	if team == 1:
-		sprite_shirt.set_modulate(team2)
-	if team == 2:
-		sprite_shirt.set_modulate(team3)
-	if team == 3:
-		sprite_shirt.set_modulate(team4)
 
-func _notification(what):
-	if (what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST):
-		#turn off LEDs on quit:
-		#leds.set_led(player_number, 0, 0, 0, 0, 0)
-		#leds.set_led(player_number, 1, 0, 0, 0, 0)
-		
-		get_tree().quit() # default behavior
+	anim_player = $anim_player
+	anim_item = $anim_item
+	sprite_player = $sprite_player
+	sprite_shirt = $sprite_player/shirt
+	sprite_item = $sprite_item
+	particle_fire = $fire
+	particle_explosion = $explosion
+
+	set_sprites()
+
+	anim_player.play("walk")
+
+func init_player():
+	sprite_shirt.self_modulate = team_colors[team]
 
 func set_sprites():
 	if old_item != item:
 		if item == ITEM_NONE:
-			sprite_player.set_texture(player_sprite_normal)
-			sprite_shirt.set_texture(player_shirt_normal)
-			sprite_item.set_texture(null)
-			particle_fire.set_emitting(false)
+			sprite_player.texture = player_sprite_normal
+			sprite_shirt.texture = player_shirt_normal
+			sprite_item.texture = null
+			particle_fire.emitting = false
 			pig_carry_counter = 0
 		elif item == ITEM_CRYSTAL:
-			sprite_player.set_texture(player_sprite_crystal)
-			sprite_shirt.set_texture(player_shirt_crystal)
-			sprite_item.set_texture(null)
+			sprite_player.texture = player_sprite_crystal
+			sprite_shirt.texture = player_shirt_crystal
+			sprite_item.texture = null
 		elif item == ITEM_BERNCRYSTAL:
-			sprite_player.set_texture(player_sprite_berncrystal)
-			sprite_shirt.set_texture(player_shirt_berncrystal)
-			sprite_item.set_texture(item_berncrystal)
-			particle_fire.set_amount(16)
+			sprite_player.texture = player_sprite_berncrystal
+			sprite_shirt.texture = player_shirt_berncrystal
+			sprite_item.texture = item_berncrystal
+			particle_fire.amount = 16
 		elif item == ITEM_DYNAMITE:
-			sprite_player.set_texture(player_sprite_dynamite)
-			sprite_shirt.set_texture(player_shirt_dynamite)
-			sprite_item.set_texture(item_dynamite)
+			sprite_player.texture = player_sprite_dynamite
+			sprite_shirt.texture = player_shirt_dynamite
+			sprite_item.texture = item_dynamite
 		elif item == ITEM_GEAR:
-			sprite_player.set_texture(player_sprite_gear)
-			sprite_shirt.set_texture(player_shirt_gear)
-			sprite_item.set_texture(item_gear)
+			sprite_player.texture = player_sprite_gear
+			sprite_shirt.texture = player_shirt_gear
+			sprite_item.texture = item_gear
 		old_item = item
 		anim_item.play("item")
 
-func set_frames(var frame):
-	sprite_player.set_frame(frame)
-	sprite_shirt.set_frame(frame)
+func set_frames(frame):
+	sprite_player.frame = frame
+	sprite_shirt.frame = frame
 
-func _fixed_process(delta):
+func _physics_process(delta):
 	push_timer -= delta
-	var mv = get_linear_velocity()
+	var mv = linear_velocity
 	var walking = false
 	set_sprites()
-	
+
 	if item == ITEM_CRYSTAL || item == ITEM_BERNCRYSTAL:
 		pig_carry_counter += delta
 		pig_more_time_counter += delta
 		cytrill.set_led(player_number, 1, 255, 0, 255, 1)
-			
+
 		if pig_carry_counter > pig_max_carry:
 			# PIG EXPLODE
 			pig_carry_counter = 0
 			item = ITEM_NONE
-			particle_fire.set_emitting(false)
-			particle_explosion.set_emitting(true)
+			particle_fire.emitting = false
+			particle_explosion.restart()
 			#dim right LED
 			cytrill.set_led(player_number, 1, 255, 0, 255, 0)
 		elif pig_carry_counter > (pig_max_carry-(pig_max_carry/4)):
-			particle_fire.set_amount(128)
+			set_fire_amount(128)
 			cytrill.set_led(player_number, 1, 255, 0, 255, 7)
 		elif pig_carry_counter > pig_max_carry/2:
-			particle_fire.set_amount(64)
+			set_fire_amount(64)
 			cytrill.set_led(player_number, 1, 255, 0, 255, 5)
 		elif pig_carry_counter > pig_max_carry/3:
-			particle_fire.set_amount(16)
+			set_fire_amount(16)
 			cytrill.set_led(player_number, 1, 255, 0, 255, 4)
-			particle_fire.set_emitting(true)
-		
+			particle_fire.emitting = true
+
 		if pig_more_time_counter > pig_max_more_time:
 			pig_max_carry = 5
 	else:
 		cytrill.set_led(player_number, 1, 0, 0, 0, 0)
-		
-	if Input.get_joy_axis(player_number, 1) > joy_tresh:
+
+	if controls.get_joy_axis(player_number, JOY_AXIS_LEFT_Y) > joy_tresh:
 		walking = true
 		if mv.y < move_max:
 			mv.y += move_accel*delta
 			mov_y = 1
-	elif Input.get_joy_axis(player_number,  1) < -joy_tresh:
+	elif controls.get_joy_axis(player_number, JOY_AXIS_LEFT_Y) < -joy_tresh:
 		walking = true
 		if mv.y > -move_max:
 			mv.y -= move_accel*delta
@@ -181,13 +160,13 @@ func _fixed_process(delta):
 		if yv < 0:
 			yv = 0
 		mv.y = sign(mv.y)*yv
-	
-	if Input.get_joy_axis(player_number, 0) > joy_tresh:
+
+	if controls.get_joy_axis(player_number, JOY_AXIS_LEFT_X) > joy_tresh:
 		walking = true
 		if mv.x < move_max:
 			mv.x += move_accel*delta
 			mov_x = 1
-	elif Input.get_joy_axis(player_number,  0) < -joy_tresh:
+	elif controls.get_joy_axis(player_number, JOY_AXIS_LEFT_X) < -joy_tresh:
 		walking = true
 		if mv.x > -move_max:
 			mv.x -= move_accel*delta
@@ -199,13 +178,13 @@ func _fixed_process(delta):
 		if xv < 0:
 			xv = 0
 		mv.x = sign(mv.x)*xv
-	
+
 	if walking:
 		if !anim_player.is_playing():
 			anim_player.play("walk")
 	else:
 		anim_player.stop()
-	
+
 	if mov_x == 0 && mov_y == 1:
 		# unten
 		set_frames(1)
@@ -230,71 +209,80 @@ func _fixed_process(delta):
 	elif mov_x == 1 && mov_y == -1:
 		# oben rechts
 		set_frames(3)
-	
-	set_linear_velocity(mv)
-	
-func _integrate_forces(state):
-	if state.get_contact_count() > 0:
-		for x in range(state.get_contact_count()):
-			var o = state.get_contact_collider_object(x)
-			if "pig" in o.get_groups() && item == ITEM_NONE:
-				o.set_collision_mask(8)
-				o.set_layer_mask(8)
-				o.queue_free()
-				item = ITEM_CRYSTAL
-			elif "player" in o.get_groups():
-				if get_linear_velocity().length() > o.get_linear_velocity().length() && push_timer <= 0:
-					push_timer = 1
-					o.push_timer = 1
-					if o.item != ITEM_NONE && item == ITEM_NONE:
-						if o.item == ITEM_CRYSTAL || o.item == ITEM_BERNCRYSTAL:
-							pig_carry_counter = o.pig_carry_counter
-							particle_fire.set_amount(o.particle_fire.get_amount())
-							particle_fire.set_emitting(o.particle_fire.is_emitting())
-						item = o.item
-						o.item = ITEM_NONE
-					o.apply_impulse(get_pos(), get_linear_velocity().normalized()*600)
-			elif "factory" in o.get_groups() && !o.gear_missing && item == ITEM_CRYSTAL:
-				# Crystal
-				item = ITEM_NONE
-				pig_carry_counter = 0
-				o.process_pig("normal")
-			elif "factory" in o.get_groups() && !o.gear_missing && item == ITEM_BERNCRYSTAL:
-				# Bernschwein
-				item = ITEM_NONE
-				pig_carry_counter = 0
-				o.process_pig("bernschwein")
-			elif "factory" in o.get_groups() && !o.gear_missing && item == ITEM_DYNAMITE:
-				# Dynamite
-				o.get_node("Sprite").set_texture(factory_closed)
-				o.get_node("Sprite").set_hframes(1)
-				o.get_node("Sprite").set_frame(0)
-				item = ITEM_NONE
-				o.process_pig("dynamite")
-			elif "factory" in o.get_groups() && o.gear_missing && item == ITEM_GEAR:
-				# Gear
-				o.get_node("Sprite").set_texture(factory_normal)
-				o.get_node("Sprite").set_hframes(6)
-				item = ITEM_NONE
-				o.gear_missing = false
-			elif "gear" in o.get_groups() && item == ITEM_NONE:
-				o.set_collision_mask(8)
-				o.set_layer_mask(8)
-				o.queue_free()
-				item = ITEM_GEAR
-			elif "supply" in o.get_groups() && item == ITEM_NONE:
-				o.set_collision_mask(8)
-				o.set_layer_mask(8)
-				o.queue_free()
-				if o.item == "bernschwein":
-					item = ITEM_BERNCRYSTAL
-				elif o.item == "colorchange":
-					sprite_item.set_texture(item_colorchange)
-					anim_item.play("item")
-					get_node("/root/MainNode").rotate_factory_teams()
-				elif o.item == "dynamite":
-					item = ITEM_DYNAMITE
-				elif o.item == "einstein":
-					sprite_item.set_texture(item_einstein)
-					anim_item.play("item")
-					pig_max_carry = 10
+
+	linear_velocity = mv
+
+	handle_contacts()
+
+# Changing the amount restarts the particle system, so only do it on change.
+func set_fire_amount(amount):
+	if particle_fire.amount != amount:
+		particle_fire.amount = amount
+
+# Pick up, hand over and deliver items. The original game did this in
+# _integrate_forces; in Godot 4 the scene tree must not be changed while the
+# physics server is flushing, so it runs from _physics_process instead.
+func handle_contacts():
+	for o in get_colliding_bodies():
+		if o.is_queued_for_deletion():
+			continue
+		if o.is_in_group("pig") && item == ITEM_NONE:
+			o.collision_mask = 8
+			o.collision_layer = 8
+			o.queue_free()
+			item = ITEM_CRYSTAL
+		elif o.is_in_group("player"):
+			if linear_velocity.length() > o.linear_velocity.length() && push_timer <= 0:
+				push_timer = 1
+				o.push_timer = 1
+				if o.item != ITEM_NONE && item == ITEM_NONE:
+					if o.item == ITEM_CRYSTAL || o.item == ITEM_BERNCRYSTAL:
+						pig_carry_counter = o.pig_carry_counter
+						particle_fire.amount = o.particle_fire.amount
+						particle_fire.emitting = o.particle_fire.emitting
+					item = o.item
+					o.item = ITEM_NONE
+				o.apply_central_impulse(linear_velocity.normalized()*600)
+		elif o.is_in_group("factory") && !o.gear_missing && item == ITEM_CRYSTAL:
+			# Crystal
+			item = ITEM_NONE
+			pig_carry_counter = 0
+			o.process_pig("normal")
+		elif o.is_in_group("factory") && !o.gear_missing && item == ITEM_BERNCRYSTAL:
+			# Bernschwein
+			item = ITEM_NONE
+			pig_carry_counter = 0
+			o.process_pig("bernschwein")
+		elif o.is_in_group("factory") && !o.gear_missing && item == ITEM_DYNAMITE:
+			# Dynamite
+			o.get_node("Sprite").texture = factory_closed
+			o.get_node("Sprite").hframes = 1
+			o.get_node("Sprite").frame = 0
+			item = ITEM_NONE
+			o.process_pig("dynamite")
+		elif o.is_in_group("factory") && o.gear_missing && item == ITEM_GEAR:
+			# Gear
+			o.get_node("Sprite").texture = factory_normal
+			o.get_node("Sprite").hframes = 6
+			item = ITEM_NONE
+			o.gear_missing = false
+		elif o.is_in_group("gear") && item == ITEM_NONE:
+			o.collision_mask = 8
+			o.collision_layer = 8
+			o.queue_free()
+			item = ITEM_GEAR
+		elif o.is_in_group("supply") && item == ITEM_NONE:
+			o.collision_mask = 8
+			o.collision_layer = 8
+			o.queue_free()
+			if o.item == "bernschwein":
+				item = ITEM_BERNCRYSTAL
+			elif o.item == "colorchange":
+				sprite_item.texture = item_colorchange
+				anim_item.play("item")
+				get_node("/root/MainNode").rotate_factory_teams()
+			elif o.item == "dynamite":
+				item = ITEM_DYNAMITE
+			elif o.item == "einstein":
+				sprite_item.texture = item_einstein
+				anim_item.play("item")

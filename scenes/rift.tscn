@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://gfx/rift.png" id="1"]
+
+[node name="Rift" type="Sprite2D"]
+position = Vector2(-253.72, 0.507446)
+texture = ExtResource("1")
+offset = Vector2(253.72, -0.507446)

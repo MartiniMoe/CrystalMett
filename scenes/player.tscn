@@ -1,0 +1,220 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1"]
+[ext_resource type="Texture2D" path="res://gfx/PlayerCrystal.png" id="2"]
+[ext_resource type="Texture2D" path="res://gfx/player_Shirt.png" id="3"]
+[ext_resource type="Texture2D" path="res://gfx/shadow.png" id="4"]
+[ext_resource type="Texture2D" path="res://gfx/CrystalParticle.png" id="5"]
+[ext_resource type="Gradient" path="res://gfx/colorramp_fire.tres" id="6"]
+[ext_resource type="Texture2D" path="res://gfx/BonusBernschwein.png" id="7"]
+
+[sub_resource type="Animation" id="2"]
+length = 1.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("sprite_player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(4, 2), Vector2(4, -18)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sprite_player:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.4, 0.6)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("shadow:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.3, 0.2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("shadow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.93711, 25.4076), Vector2(1.93711, 25.4076)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("shadow:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.7, 0.7)]
+}
+
+[sub_resource type="Gradient" id="4"]
+offsets = PackedFloat32Array(0.680965, 1)
+colors = PackedColorArray(0.610681, 0, 0.502367, 1, 1, 1, 1, 0)
+
+[sub_resource type="Animation" id="5"]
+resource_name = "item"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("sprite_item:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.2, 0.2), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("sprite_item:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="1001"]
+_data = {
+&"walk": SubResource("2")
+}
+
+[sub_resource type="Curve" id="1002"]
+_data = [Vector2(0, 0.333333), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="1003"]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="AnimationLibrary" id="1004"]
+_data = {
+&"item": SubResource("5")
+}
+
+[node name="Player" type="RigidBody2D"]
+z_index = 1
+lock_rotation = true
+mass = 1.0
+gravity_scale = 1.0
+max_contacts_reported = 2
+contact_monitor = true
+script = ExtResource("1")
+
+[node name="sprite_player" type="Sprite2D" parent="."]
+position = Vector2(4, 2)
+scale = Vector2(0.5, 0.5)
+z_index = 1
+texture = ExtResource("2")
+hframes = 8
+frame = 7
+
+[node name="shirt" type="Sprite2D" parent="sprite_player"]
+z_index = 2
+texture = ExtResource("3")
+hframes = 8
+frame = 7
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(2.40743, 33.9644, -11.9272, 25.8285, 4.53826, 15.9492, 18.0981, 24.2788)
+
+[node name="anim_player" type="AnimationPlayer" parent="."]
+speed_scale = 2.0
+libraries = {
+&"": SubResource("1001")
+}
+
+[node name="shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.3)
+position = Vector2(1.93711, 25.4076)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4")
+
+[node name="explosion" type="CPUParticles2D" parent="."]
+z_index = 1
+emitting = false
+amount = 128
+lifetime = 0.5
+one_shot = true
+local_coords = false
+texture = ExtResource("5")
+direction = Vector2(0, 1)
+spread = 180
+gravity = Vector2(0, 0)
+initial_velocity_min = 50
+initial_velocity_max = 100
+angular_velocity_min = 0
+angular_velocity_max = 114.592
+orbit_velocity_min = 0
+orbit_velocity_max = 0.31831
+angle_min = 0
+angle_max = 360
+scale_amount_min = 0.225
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("1002")
+color_ramp = SubResource("4")
+
+[node name="fire" type="CPUParticles2D" parent="."]
+z_index = 1
+emitting = false
+amount = 128
+lifetime = 3
+local_coords = false
+direction = Vector2(0, -1)
+spread = 30
+gravity = Vector2(0, 0)
+initial_velocity_min = 40
+initial_velocity_max = 40
+angular_velocity_min = 0
+angular_velocity_max = 171.887
+orbit_velocity_min = 0
+orbit_velocity_max = 0
+angle_min = 0
+angle_max = 360
+scale_amount_min = 8
+scale_amount_max = 8
+scale_amount_curve = SubResource("1003")
+color_ramp = ExtResource("6")
+
+[node name="sprite_item" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.0)
+position = Vector2(0, -184)
+texture = ExtResource("7")
+
+[node name="anim_item" type="AnimationPlayer" parent="."]
+speed_scale = 1.0
+libraries = {
+&"": SubResource("1004")
+}

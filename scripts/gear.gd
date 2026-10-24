@@ -5,20 +5,21 @@ var fly_time = 4
 var fly_timer = 0
 
 func _ready():
-	set_fixed_process(true)
-	set_collision_mask(2)
-	set_layer_mask(2)
+	collision_mask = 2
+	collision_layer = 2
 
-func _fixed_process(delta):
+func _physics_process(delta):
 	if flying:
 		fly_timer += delta
-		apply_impulse(get_pos(), Vector2(0, 0.5))
-		set_angular_velocity(0.2)
+		apply_central_impulse(Vector2(0, 0.5))
+		angular_velocity = -0.2
 		if fly_timer > fly_time:
-			set_linear_velocity(Vector2(0,0))
-			set_collision_mask(1)
-			set_layer_mask(1)
+			linear_velocity = Vector2(0, 0)
+			angular_velocity = 0
+			collision_mask = 1
+			collision_layer = 1
 			flying = false
-			set_rot(0)
-			get_node("AnimationPlayer").play("land")
+			lock_rotation = true
+			rotation = 0
+			$AnimationPlayer.play("land")
 			fly_timer = 0
